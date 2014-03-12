@@ -48,6 +48,7 @@ class Member_Page extends Page
         Password: <input type="password" name="pass" /><br/>
         <input type="submit" value="Submit"/>
      </form>
+     <a class="passwordReset" href="password-reset.php">Forgot your password?</a>
      <br/>
      <font size="5">Or:</font></br>
      <a href="signup.php"><font size="5">Sign up now!</font></a><br/><br/><br/>
