@@ -7,8 +7,11 @@
    $homepage -> content = "<p>Welcome to the Football Picking Championship </p><br/>
                             <br/><br/>
                             <h3>
-                            Signup for 2013 FPC is now open.
+                            Congrats to FPC 2013 Champion, David Spielman.
                             </h3>
+   							<p>
+   							Thanks to all who played in 2013.
+   							</p>
                             <a href=\"login.php\">Login</a> or <a href=\"signup.php\">Sign Up</a> Today.<br/>
                             <br/>The Football Picking Championship is a unique football picking competition that 
                             consists of four different football picking games, each with its own twist:<br/>
