@@ -89,7 +89,7 @@ class Page
    ?>
    <table width="100%" cellpadding="12" cellspacing="0" border="0">
    <tr>
-   <td align="left"><img src="Logo.png" alt="FPC logo" height="70" width="120"></td>
+   <td align="left"><img src="images/Logo.png" alt="FPC logo" height="70" width="120"></td>
    <td>
       <h1>The Football Picking Championship</h1>
    </td>
@@ -187,14 +187,14 @@ class Page
       if ($active) {
         echo "<td width=\"".$width."%\">
           <a href=\"".$url."\">
-          <img src=\"nothere.png\" alt=\"".$name."\" border=\"0\" /></a>
+          <img src=\"images/nothere.png\" alt=\"".$name."\" border=\"0\" /></a>
           <a href=\"".$url."\"><span class=\"menu\">".$name."<span></a>
           </td>";
           }
           else
           {
           echo "<td width=\"".$width."%\">
-            <img src=\"here.png\">
+            <img src=\"images/here.png\">
             <span class=\"menu\">".$name."</span>
             </td>";
           }

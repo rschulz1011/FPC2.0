@@ -145,7 +145,7 @@ class Overall_Standings_Page extends page
       echo "</table><br><br><br><br><h3>Special Awards</h3>";
       
       echo "<table class=\"specialcontainer\"><tr><td class=\"specialinfo\">";
-      echo "<strong>The Corso Award</strong><br><p>For Excellence in Picking College Gameday Games</p><img src=\"corso.jpg\">";
+      echo "<strong>The Corso Award</strong><br><p>For Excellence in Picking College Gameday Games</p><img src=\"images/corso.jpg\">";
       
       echo "</td><td>";
       echo "<table class=\"specialstanding\"><tr><th>Rank</th><th>Username</th><th>Correct Picks</th><th>Points Earned</th></tr>";
@@ -171,7 +171,7 @@ class Overall_Standings_Page extends page
 	  echo "</table></td></tr></table></br></br>";
 	  
       echo "<table class=\"specialcontainer\"><tr><td class=\"specialinfo\">";
-      echo "<strong>The Dierdorf Award</strong><br><p>For Excellence in Picking Sunday and Monday Night Games</p><img src=\"dierdorf.jpg\"></td><td>";
+      echo "<strong>The Dierdorf Award</strong><br><p>For Excellence in Picking Sunday and Monday Night Games</p><img src=\"images/dierdorf.jpg\"></td><td>";
       
       echo "<table class=\"specialstanding\"><tr><th>Rank</th><th>Username</th><th>Correct Picks</th></tr>";
       
@@ -197,7 +197,7 @@ class Overall_Standings_Page extends page
 	  echo "</table></td></tr></table></br></br>";
 	  
 	  echo "<table class=\"specialcontainer\"><tr><td class=\"specialinfo\">";
- 	  echo "<strong>The Lester 'Worm' Murphy Award</strong><br><p>For Most Profitable Picks Against the Spread (NCAA and NFL)</p><img src=\"worm.jpg\"></td><td>";
+ 	  echo "<strong>The Lester 'Worm' Murphy Award</strong><br><p>For Most Profitable Picks Against the Spread (NCAA and NFL)</p><img src=\"images/worm.jpg\"></td><td>";
       
       echo "<table class=\"specialstanding\"><tr><th>Rank</th><th>Username</th><th>Avg Profit on $100 bet (-110)</th><th>Correct Picks</th></tr>";
       
@@ -225,7 +225,7 @@ class Overall_Standings_Page extends page
 	  
       echo "<table class=\"specialcontainer\"><tr><td class=\"specialinfo\">";
       
-       	  echo "<strong>The Richard Hatch Award</strong><br><p>For Best Winning Margin in Survivor Picks</p><img src=\"hatch.jpg\"></td><td>";
+       	  echo "<strong>The Richard Hatch Award</strong><br><p>For Best Winning Margin in Survivor Picks</p><img src=\"images/hatch.jpg\"></td><td>";
       
       echo "<table class=\"specialstanding\"><tr><th>Rank</th><th>Username</th><th>Average Winning Margin</th><th>Total Picks</th></tr>";
       
