@@ -1,0 +1,23 @@
+select (select count(*) from question where pickname like "%gameday%" and correctans is not null) as tot, 
+count(*) as a, sum(pickpts), pick.username from pick, question 
+where pick.questionID = question.questionID and pickname like "%gameday%" and pickpts>0
+group by username order by a desc;
+
+select (select count(*) from question where picktype="ATS" and bonusmult=2 and correctans is not null) as tot, 
+count(*) as a, pick.username from pick, question 
+where pick.questionID = question.questionID and picktype="ATS" and bonusmult=2 and pickpts>0
+group by username order by a desc;
+
+select (select count(*) from question where (picktype="ATS" or picktype="ATS-C") and correctans is not null) as tot, 
+count(*) as a, pick.username from question, pick where pick.questionID = question.questionID and 
+(picktype="ATS" or picktype="ATS-C") and pick.pickpts>0 group by username order by a desc;
+
+select a.username, sum(a.margin) as totalmargin, count(*) as totalpicks, 
+sum(a.margin)/count(*) as avgmargin from 
+(select pick.pick, pick.username, game.ascore, game.hscore, pick.pickpts, 
+((pick.pickpts>0)*2-1)*abs(game.ascore-game.hscore) as margin
+from pick, question, game 
+where pick.questionID = question.questionID and (question.picktype="S-COL" or question.picktype="S-PRO")
+and (game.ateamID=pick.pick or game.hteamID=pick.pick) and game.ascore is not null
+and game.weeknum = question.weeknum) as a
+group by username order by avgmargin desc;
