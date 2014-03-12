@@ -47,40 +47,7 @@ class Page
   public function DisplayStyles()
   {
    ?>
-   <style type="text/css">
-   h1 {color:red; font-size:24pt; text-align:center;
-       font-family:arial,sans-serif;font-weight:bold}
-   .menu {color:red; font-size:12pt; text-align:center;
-       font-family:arial,sans-serif; font-weight:bold}
-   td.foot {background:red}
-   p {color:black; font-size:12pt; text-align:justify;
-      font-family:arial,sans-serif}
-   p.foot {color:white; font-size:9pt; text-align:center;
-       font-family:arial,sans-serif; font-weight:bold}
-   g.good {color:green}
-   g.bad {color:red}
-   a:link,a:visited,a:active {color:red}
-   a.normal {color:blue}
-   th.vpheader{font-size:70%; font-family:Arial}
-   tr.shaded {background:AliceBlue}
-   tr.userpick {font-size:60%; font-family:Arial}
-   tr.highlight {background:yellow}
-   td.goodpick {color:green; font-weight:bold}
-   td.pushpick {color:#FFCC33; font-weight:bold}
-   td.badpick {color:red; font-weight:bold; text-decoration: line-through}
-   td.pendingpick {color:blue; font-weight:bold; font-style: italic}
-   td.vppending {background:LightCyan; font-style: italic}
-   td.vpcorrect {background:#80CC99}
-   td.vppush {background:Yellow}
-   td.vpwrong {background:#FF6666}
-   td.vphidden {background:Silver}
-   td.vpempty {background:LightGrey}
-   table.specialcontainer {text-align:center; background-color: #F5F5F5; width:80%}
-   table.specialcontainer p {margin: 0 0 0 0; padding: 0 0 0 0; font-size: .7em}
-   table.specialcontainer img {margin-top:.1em; padding-top:0}
-   table.specialstanding {text-align:center; width:100%; background-color:#EEEEEE}
-   td.specialinfo {width:20%}
-   </style>
+   <LINK href="css/stylesheet.css" rel="stylesheet" type="text/css">
    <?php
    }
   
