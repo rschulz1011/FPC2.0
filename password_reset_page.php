@@ -24,7 +24,7 @@ class Password_Reset_Page extends Page
 	public function DisplayPasswordUpdateForm($row)
 	{
      
-		$this->content = 
+		$this->content = $this->content.
    		'<form id="passwordchange" name="passwordchange" method="post" action="password-reset.php">
    	    <p><label for="password" class="label">Password:</label>
 	    <input type="password" name="password" id="password" value=""
