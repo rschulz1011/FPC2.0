@@ -2,6 +2,8 @@
 
 session_start();
 
+require("db.php");
+
 class Page
 {
 
@@ -10,7 +12,13 @@ class Page
   public $content;
   public $title = "Football Picking Championship";
   public $keywords = "Football picking, pick'em";
-                        
+  private $db;
+  
+  public function __construct()
+  {
+  	$this->db = new Db();
+  }
+  
   //class Page's operations
   public function __set($name,$value)
   {
@@ -126,15 +134,8 @@ class Page
   public function authenticateUser()
    {
         if (isset($_SESSION['username']))
-        {
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           $query = "select password, admin from user where username='".$_SESSION['username']."' 
-           and  password='".$_SESSION['password']."'";
-           
-           $result = $db->query($query);
-           
+        {          
+           $result = $this->db->authenticateUser($_SESSION['username'],$_SESSION['password']);           
            $num_rows = $result->num_rows;
            
            if ($num_rows==1) {

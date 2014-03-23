@@ -3,9 +3,10 @@
    require("add_games_page.php");
    require("get_weeknum.php");
    
-      $page = new Add_Games_Page();
-
+   $db = new Db();
    
+   $page = new Add_Games_Page();
+
    if (isset($_GET['addgameleague']))
    {
         for ($i=0;$i<10;$i++)
@@ -33,52 +34,20 @@
                //check to make sure teams are not playing eachother
                if ($ateam==$hteam){$error="Teams can not play themselves";}
                
-               @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-                'fpcdata','bB()*45.ab','fpcdata');
+                $ateam_name = $db->getTeamName($ateam);
                 
-                $query = "select location from team where teamID='".$ateam."'";
-                $result = $db->query($query);
-                $row = $result->FETCH_ASSOC();
-                $ateam_name = $row['location'];
-                
-                $query = "select location from team where teamID='".$hteam."'";
-                $result = $db->query($query);
-                $row = $result->FETCH_ASSOC();
-                $hteam_name = $row['location'];
+                $hteam_name = $db->getTeamName($hteam);
                 
                 if (strlen($error)<3)
                 {
-                     $query = "select KOtime from game where ateamID='".$ateam."' and hteamID='".
-                             $hteam."'";
-                     $result = $db->query($query);
-                     $num_rows = $result->num_rows;
-                     if ($num_rows>0)
-                     {
-                        for ($j=0;$j<$num_rows;$j++)
-                        {
-                            $row = $result->FETCH_ASSOC();
-                            if (($timeval)==strtotime($row['KOtime']))
-                            { $error = "Game has allready been entered";}
-                        }
-                     }
+                	 $gameExists = $db->gameExists($ateam,$hteam,$timeval);
+                     if ($gameExists) { $error = "Game has allready been entered";}
                 }
                 
                 if (strlen($error)<3)
                 {
-                   if (strlen($spread)>0)
-                   {
-                   $query = "insert into game (hteamID, ateamID, KOtime, weeknum, spread) values 
-                            ('".$hteam."','".$ateam."','".date("Y-m-d H:i:s",$timeval)."','".$weeknum."','".$spread."')";
-                   }
-                   else
-                   {
-                   $query = "insert into game (hteamID, ateamID, KOtime, weeknum) values 
-                            ('".$hteam."','".$ateam."','".date("Y-m-d H:i:s",$timeval)."','".$weeknum."')";
-                   }
-                   $result = $db->query($query);
-                   $num_rows = $db->affected_rows;
-                   
-                   if ($num_rows!=1) {$error="Was not able to add to database";}
+                   $gameAdded = $db->addGame($hteam,$ateam,$timeval,$spread);
+                   if (!$gameAdded) {$error="Was not able to add to database";}
                 }
                      
                      
@@ -93,7 +62,6 @@
                    $page->content = $page->content."<g class=\"bad\">".$ateam_name." vs. ".
                    $hteam_name.": ".$error."</g><br/>";
               }
-            $db->close();
               
            }
             

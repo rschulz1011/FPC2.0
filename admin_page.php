@@ -7,18 +7,18 @@ class Admin_Page extends Member_Page
 {
 
    public $admin_level = 2;
+   private $db;
+   
+   public function __construct()
+   {
+       $this->db = new Db();
+   }
    
    public function authenticateUser()
    {
         if (isset($_SESSION['username']))
-        {
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           $query = "select password,admin from user where username='".$_SESSION['username']."' 
-           and  password='".$_SESSION['password']."'";
-           
-           $result = $db->query($query);
+        {           
+           $result = $this->db->authenticateUser($_SESSION['username'],$_SESSION['password']);
            
            $num_rows = $result->num_rows;
            

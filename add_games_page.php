@@ -7,6 +7,12 @@ class Add_Games_Page extends Admin_Page
 {
      
      public $addgameleague = "NCAA";
+     private $db;
+     
+     public function __construct()
+     {
+     	$this->db = new Db();
+     }
      
       public function Display()
       {
@@ -40,14 +46,8 @@ class Add_Games_Page extends Admin_Page
      function DisplayGameTable()
      {   
      
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
+       $result = $this->db->getAllTeams($this->addgameleague);
            
-           $query = "select location, nickname, teamID from team where league = \"".$this->addgameleague."\" 
-                  order by location";
-           
-           $result = $db->query($query);
-     
        echo "<form name=\"addgame\" action=\"add_game.php?addgameleague=".$this->addgameleague.
             "\" method=\"post\"><table><th>Date</th><th>Time</th><th>Away Team</th><th>Home Team
             </th><th>Spread</th>";
@@ -64,18 +64,14 @@ class Add_Games_Page extends Admin_Page
        }
        
        echo "<tr><td><td><td><td><td><input type=\"submit\" value=\"Add Games\"></td>
-           <td><a href=\"viewgames.php\">View Games</a></td></form></table>";
-    
-      $db->close();
-       
+           <td><a href=\"viewgames.php\">View Games</a></td></form></table>";   
      }
      
      public function MakeTeamSelector($result,$menuname,$selected)
      {
+         echo "<select name=\"".$menuname."\">";
             
-            echo "<select name=\"".$menuname."\">";
-            
-            if ($selected==0) {echo "<option selected value=\"0\"></option>";};
+            if ($selected==0) {echo "<option selected value=\"0\"></option>";}
             
             $num_rows = $result->num_rows;
             for ($i=0;$i<$num_rows;$i++)
@@ -88,7 +84,6 @@ class Add_Games_Page extends Admin_Page
             
             echo "</select>";
             $result->data_seek(0);
-     
      }
      
      

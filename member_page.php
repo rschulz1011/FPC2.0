@@ -10,7 +10,11 @@ class Member_Page extends Page
   public $content;
   public $title = "Football Picking Championship";
   public $keywords = "Football picking, pick'em";
-
+  private $db;
+  
+  function __construct() {
+  	$this->db = new Db();	
+  }
   
   public function Display()
   {
@@ -57,16 +61,10 @@ class Member_Page extends Page
 
   
   public function authenticateUser()
-   {
-        if (isset($_SESSION['username']))
-        {
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           $query = "select password, admin from user where username='".$_SESSION['username']."' 
-           and  password='".$_SESSION['password']."'";
-           
-           $result = $db->query($query);
+  {
+       if (isset($_SESSION['username']))
+       {   
+           $result = $this->db->authenticateUser($_SESSION['username'],$_SESSION['password']);
            
            $num_rows = $result->num_rows;
            
@@ -101,13 +99,8 @@ class Member_Page extends Page
         <textarea name=\"posttext\" cols=\"100\" rows=\"5\"></textarea><br>
         <input type=\"submit\" value=\"POST!\"/>
         <input name=\"linkback\" type=\"hidden\" value=\"".$linkback."\"></form>";
-      
-      @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-        $query = "select * from post order by posttime desc limit ".$maxnumposts;
-        
-        $result = $db->query($query);
+              
+        $result = $this->db->getPosts($maxnumposts);
         
         $numposts = $result->num_rows;
         
