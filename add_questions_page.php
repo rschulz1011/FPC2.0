@@ -11,7 +11,7 @@ class Add_Questions_Page extends Admin_Page
      public $league;
      public $defaultpick;
      public $selectorlink = "add_questions.php";
-
+     
      public function Display()
       {
       echo "<html>\n<head>\n";
@@ -43,10 +43,7 @@ class Add_Questions_Page extends Admin_Page
      }
      
      function DisplaySelector()
-     {   
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
+     {              
            // set up default entries to question view
            if (isset($_GET['qview_comp']))
            {
@@ -75,14 +72,11 @@ class Add_Questions_Page extends Admin_Page
                $this->weeknum = 1;
             }
             
-            $query = "select league,defaultpick from competition where competitionID='".$this->compID."'";
-            $result = $db->query($query);
-            $row = $result->fetch_assoc();
-            $this->league = $row['league'];
-            $this->defaultpick = $row['defaultpick'];
+            $this->league = $this->db->getLeague($this->compID);
+            $this->defaultpick = $this->db->getDefaultPick($this->compID);
             
-            $query = "select * from competition where active = 1";
-            $result = $db->query($query);
+            $result = $this->db->getCurrentCompetitions();
+            
             $num_results = $result->num_rows;
             
             echo "<form name=\"viewquestionselect\" action=\"".$this->selectorlink."?weeknum="
@@ -112,19 +106,12 @@ class Add_Questions_Page extends Admin_Page
            echo " value=\"99\">".$special."</option></select>";
            
            echo  "</select><input type=\"submit\" value=\"GO\"/></form>";
-           $db->close();
     }
     
             
     public function DisplayQuestionTable()
-    {
-            @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           $query = "select a.location, h.location, game.gameID from team as a, team as h, game where 
-           game.weeknum=".$this->weeknum." and a.teamID=game.ateamID and h.teamID=game.hteamID and a.league='".$this->league."'";
-           
-           $result = $db->query($query);
+    {  
+    	$result = $this->db->getGamesForWeek($this->weeknum,$this->league);
      
        echo "<form name=\"addquestion\" action=\"add_questions.php?weeknum=".$this->weeknum.
             "&compID=".$this->compID."\" method=\"post\"><table>
@@ -161,7 +148,6 @@ class Add_Questions_Page extends Admin_Page
        echo "<tr><td><td><td><td><td><input type=\"submit\" value=\"Add Questions\"></td>
            <td><a href=\"viewquestions.php\">View Questions</a></td></form></table>";
     
-      $db->close();
      }
      
      public function MakeGameSelector($result,$menuname,$selected)

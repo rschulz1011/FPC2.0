@@ -6,8 +6,12 @@ class Db
 	private $db;
 	
 	function __construct() {		
-		@ $db_temp = new mysqli('fpcdata.db.8807435.hostedresource.com',
-				'fpcdata','bB()*45.ab','fpcdata');
+		//@ $db_temp = new mysqli('fpcdata.db.8807435.hostedresource.com',
+		//		'fpcdata','bB()*45.ab','fpcdata');
+		
+		@ $db_temp = new mysqli('fpctest.db.8807435.hostedresource.com',
+				'fpctest','j8@!KODs','fpctest');
+		
 		$this->db = $db_temp;
 	}
 	
@@ -74,6 +78,37 @@ class Db
 	{
 		$query = "select location, nickname, teamID from team where league = \"".$league."\"
 		       order by location";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getDefaultPick($compId)
+	{
+		$query = "select league,defaultpick from competition where competitionID=\"".$compId."\"";
+		$result = $this->db->query($query);
+		$row = $result->fetch_assoc();
+		return $row['defaultpick'];
+	}
+	
+	function getLeague($compId)
+	{
+		$query = "select league,defaultpick from competition where competitionID=\"".$compId."\"";
+		$result = $this->db->query($query);
+		$row = $result->fetch_assoc();
+		return $row['league'];
+	}
+	
+	function getCurrentCompetitions()
+	{
+		$query = "select * from competition where active = 1";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getGamesForWeek($weekNum,$league)
+	{
+		$query = "select a.location, h.location, game.gameID from team as a, team as h, game where
+           game.weeknum=".$weekNum." and a.teamID=game.ateamID and h.teamID=game.hteamID and a.league=\"".$league."\"";
 		$result = $this->db->query($query);
 		return $result;
 	}

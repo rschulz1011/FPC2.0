@@ -7,13 +7,7 @@ class Add_Games_Page extends Admin_Page
 {
      
      public $addgameleague = "NCAA";
-     private $db;
-     
-     public function __construct()
-     {
-     	$this->db = new Db();
-     }
-     
+          
       public function Display()
       {
                 echo "<html>\n<head>\n";

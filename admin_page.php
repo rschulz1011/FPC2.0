@@ -7,7 +7,7 @@ class Admin_Page extends Member_Page
 {
 
    public $admin_level = 2;
-   private $db;
+   protected $db;
    
    public function __construct()
    {
