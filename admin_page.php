@@ -1,6 +1,5 @@
 <?php
 
-
 require("member_page.php");
 
 class Admin_Page extends Member_Page

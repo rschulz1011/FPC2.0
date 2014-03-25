@@ -113,6 +113,66 @@ class Db
 		return $result;
 	}
 	
+	function getPickDataAts($gameId)
+	{
+		$query = "select ateamID,hteamID,KOtime from game where gameID='".$gameId."'";
+		$result = $this->db->query($query);
+		$row = $result->fetch_assoc();
+		
+		$pickData['optA'] = $row['ateamID'];
+		$pickData['optB'] = $row['hteamID'];
+		$pickData['locktime'] = $row['KOtime'];
+		return $pickData;
+	}
+	
+	function getPickDataSurvivor($weeknum,$league)
+	{
+		$query = "select max(game.KOtime) from game, team where team.teamID=game.hteamID
+               and team.league='".$league."' and game.weeknum='".$_GET['weeknum']."'";
+		$result = $this->db->query($query);
+		$row = $result->fetch_array(); 
+		
+		$pickData['optA'] = '';
+		$pickData['optB'] = '';
+		$pickData['locktime'] = $row[0];
+		
+		return $pickData;
+	}
+	
+	function addQuestion($compId,$pickData,$game,$name,$picktype,$weeknum,$bonus)
+	{
+		$query = "insert into question (competitionID,gameID,pickname,picktype,weeknum,option1,
+                  option2,bonusmult,locktime) values (".$compId.",".$game.",'".$name."','".
+		          $picktype."',".$weeknum.",'".$pickData['optA']."','".$pickData['optB'].
+				  "',".$bonus.",'".$pickData['locktime']."')";
+		$result = $this->db->query($query);
+		
+		$query = "select max(questionID) from question";
+		$result = $this->db->query($query);
+		$row = $result->FETCH_ASSOC();
+		$questionID = $row['max(questionID)'];
+		
+		return $questionID;
+	}
+	
+	function addPicks($questionId,$compId,$locktime)
+	{
+		$query = "select username from whoplays where competitionID = '".$compId."'";
+		$result = $this->db->query($query);
+		$num_results = $result->num_rows;
+		 
+		$query = "insert into pick (questionID, username, locktime) values ";
+		 
+		for ($j=0;$j<$num_results;$j++)
+		{
+		$row = $result->FETCH_ASSOC();
+		$query = $query."(".$questionId.",'".$row['username']."','".$locktime."')";
+		if ($j<($num_results-1)) {$query=$query.",";}
+		}
+		 
+		$result = $this->db->query($query);
+	}
+	
 }
 
 
