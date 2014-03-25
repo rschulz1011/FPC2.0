@@ -59,13 +59,7 @@ class View_Team_Page extends admin_page
            $conf_value = "Big 10";
         }
         
-        // open database
-        @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-        
-        $query = "select distinct conference from team";
-        
-        $result = $db->query($query);
+        $result = $this->db->getConferences();
         $num_results = $result->num_rows;
         
         
@@ -86,10 +80,8 @@ class View_Team_Page extends admin_page
            }
            
         echo  "</select><input type=\"submit\" value=\"GO\"/></form>";
-         
-        $query = "select teamID, location, nickname, league, conference, division from team where 
-                 league='".$league_value."' and conference='".$conf_value."'";
-        $result = $db->query($query);
+
+        $result = $this->db->getTeams($league_value,$conf_value);
         
         $num_results = $result->num_rows;
         

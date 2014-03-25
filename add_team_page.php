@@ -39,20 +39,8 @@ class Add_Team_Page extends Admin_Page
      public function DisplayTeamTable()
      {
           if ($this->teamin>0)
-          {
-            // perform database call to collect team info
-           @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           
-           $query = "select location, nickname, league, conference, division 
-           from team where teamID=".$this->teamin;
-           
-           $result = $db->query($query);
-           
-           $num_results = $result->num_rows;
-           
-           $row = $result->FETCH_ASSOC();
+          {           
+           $row = $this->db->getTeam($this->teamin);
            
            $league = $row['league']; 
            $loc = $row['location'];

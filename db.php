@@ -173,6 +173,49 @@ class Db
 		$result = $this->db->query($query);
 	}
 	
+	function getTeam($teamId)
+	{
+		$query = "select location, nickname, league, conference, division
+           from team where teamID=".$teamId;
+		$result = $this->db->query($query);
+		$num_results = $result->num_rows;
+		$row = $result->FETCH_ASSOC();
+		return $row;
+	}
+	
+	function updateTeam($loc,$nick,$league,$conf,$div,$teamId)
+	{
+		$query = "update team set location='" . $loc . "', nickname='" . $nick . "', league='" .
+				$league . "', conference='" . $conf . "', division='" . $div . "' where teamID=" .
+				$teamId;
+		$result = $this->db->query($query);
+		$num_rows = $this->db->affected_rows;
+		if ($num_rows>0) {return true;} else {return false;}	
+	}
+	
+	function addTeam($loc,$nick,$league,$conf,$div)
+	{
+		$query = "insert into team (location,nickname,league,conference,division)
+        values ('" . $loc . "','" . $nick . "','" . $league . "','" . $conf . "','" . $div . "')";
+		$result = $this->db->query($query);
+		$num_rows = $this->db->affected_rows;
+		if ($num_rows>0) {return true;} else {return false;}
+	}
+	
+	function getConferences()
+	{
+		$query = "select distinct conference from team";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getTeams($league,$conf)
+	{
+		$query = "select teamID, location, nickname, league, conference, division from team where
+                 league='".$league."' and conference='".$conf."'";
+		$result = $this->db->query($query);
+		return $result;
+	}
 }
 
 
