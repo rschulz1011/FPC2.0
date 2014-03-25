@@ -47,12 +47,8 @@ class Database_Update_Page extends Admin_Page
      
      public function DisplayBody()
      {
-        @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-         
+         $db = new Db();         
          update_database($db);
-         
-     
      }
      
 

@@ -216,6 +216,24 @@ class Db
 		$result = $this->db->query($query);
 		return $result;
 	}
+	
+	function query($query)
+	{
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function deleteGame($gameId)
+	{
+		$query = "delete from game where gameID='".$gameId."'";	
+		$result = $this->db->query($query);
+	}
+	
+	function deleteTeam($teamId)
+	{
+		$query = "delete from team where teamID='".$teamId."'";
+		$result = $this->db->query($query);
+	}
 }
 
 

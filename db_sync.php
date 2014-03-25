@@ -1,10 +1,7 @@
 <?php
 
-//require("get_weeknum.php");
-
 function update_database($db)
 {
-
          update_college_survivor_wrong_picks($db,13);
   
          $query = "select question.questionID from question,competition where question.competitionID =
@@ -18,7 +15,6 @@ function update_database($db)
             $row = $result->fetch_assoc();
             update_question($row['questionID'],$db);
          }
-
 }
 
 function update_college_survivor_wrong_picks($db,$compID)

@@ -6,8 +6,7 @@ $page = new View_Team_Page();
 
 
    
-   $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
+   $db = new Db();
    
    $num_results = $_GET['num_result'];
    
@@ -18,21 +17,14 @@ $page = new View_Team_Page();
     
       
       if (isset($_POST[$b]))
-      {$teamID = $_POST[$b];
-      if ($teamID > 0) {
-           $query = "delete from team where teamID='".$teamID."'";
-        
-           $result = $db->query($query);
-           
-           }
+      {
+      	$teamID = $_POST[$b];
+      	if ($teamID > 0) 
+      	{
+      		$db->deleteTeam($teamID);
+        }
       }
         
    } 
-        
-$db->close();
-
-
-
 $page->Display();
-
 ?>
