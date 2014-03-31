@@ -26,39 +26,12 @@ class Overall_Standings_Page extends page
   
   public function DisplayStandings()
   {
-       @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-      'fpcdata','bB()*45.ab','fpcdata');
+      $db = new Db();  
       
-      $query = "select * from competition where active=1";
-      
-      $result = $db->query($query);
+      $result = $db->getCurrentCompetitions();
       $num_comps = $result->num_rows;
       
-      $selectstr = "";
-      $fromstr = "";
-      $wherestr = "";
-      
-      for ($i=0;$i<$num_comps;$i++)
-      {
-         $row = $result->fetch_assoc();
-         $selectstr = $selectstr.", a".$i.".totalpoints as tp".$i;
-         
-         $fromstr = $fromstr.",(select totalpoints,username from whoplays where competitionID='".
-               $row['competitionID']."') as a".$i;
-               
-         if ($i>0) {$wherestr=$wherestr." and ";}
-         
-         $wherestr = $wherestr." a".$i.".username=whoplays.username";
-         
-      }
-      
-      $query = "select whoplays.username, 
-                tp.totalpoints ".$selectstr." from whoplays,
-                (select sum(whoplays.totalpoints) as totalpoints, username from whoplays, competition 
-                where competition.competitionID=whoplays.competitionID and competition.active=1 group by username) as tp ".
-           $fromstr." where ".$wherestr." and tp.username=whoplays.username group by whoplays.username order by tp.totalpoints desc";
-      
-      $sresult = $db->query($query);
+      $sresult = $db->getOverallStandings();
       $numusers = $sresult->num_rows;
     
     

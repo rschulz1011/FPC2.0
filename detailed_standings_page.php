@@ -37,12 +37,8 @@ public function Display()
 }
 
 public function DisplayStandings()
-{
-      @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-      'fpcdata','bB()*45.ab','fpcdata');
-      
-      $query = "select * from competition where competitionID='".$this->compID."'";
-      $cresult = $db->query($query);
+{      
+      $cresult = $this->db->getCompetition($this->compID);
       $row = $cresult->fetch_assoc();
       
       echo "<h3>Detailed Standings - ".$row['compname']."</h3>";
@@ -52,13 +48,7 @@ public function DisplayStandings()
       else
       {$weeknums = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,99); $numweeks=18;}
       
-      $query = "select sum(pick.pickpts), question.weeknum, pick.username,whoplays.totalpoints from 
-                pick, question,whoplays where pick.questionID = question.questionID and 
-                question.competitionID = '".$this->compID."' and whoplays.competitionID = '"
-                .$this->compID."' and whoplays.username = pick.username group by pick.username, 
-                question.weeknum order by whoplays.totalpoints desc, pick.username, question.weeknum";
-      
-      $sresult = $db->query($query);
+      $sresult = $this->db->getDetailedStandings($this->compID);      
       $numrecs = $sresult->num_rows;
       
       echo "<table><tr><th>Rank</th><th>Username</th><th>Total Score</th>";

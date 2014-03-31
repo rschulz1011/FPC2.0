@@ -281,6 +281,17 @@ class Db
 		return $result;
 	}
 	
+	function getDetailedStandings($compId)
+	{
+		$query = "select sum(pick.pickpts), question.weeknum, pick.username,whoplays.totalpoints from
+                pick, question,whoplays where pick.questionID = question.questionID and
+                question.competitionID = '".$compId."' and whoplays.competitionID = '"
+		                		.$compId."' and whoplays.username = pick.username group by pick.username,
+                question.weeknum order by whoplays.totalpoints desc, pick.username, question.weeknum";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 	function getPointsByWeek($username,$compId)
 	{
 		$query = "select question.weeknum, sum(pick.pickpts), count(pick.pickpts) as numpicks from
@@ -288,6 +299,35 @@ class Db
     	and question.questionID=pick.questionID group by question.weeknum order by question.weeknum";
 		$result = $this->db->query($query);
 		return $result;
+	}
+	
+	function getOverallStandings()
+	{
+		$currentComps = $this->getCurrentCompetitions();
+		$num_comps = $currentComps->num_rows;
+		$selectstr = "";
+		$fromstr = "";
+		$wherestr = "";
+		
+		for ($i=0;$i<$num_comps;$i++)
+		{
+			$row = $currentComps->fetch_assoc();
+			$selectstr = $selectstr.", a".$i.".totalpoints as tp".$i;
+     
+         	$fromstr = $fromstr.",(select totalpoints,username from whoplays where competitionID='".
+               	$row['competitionID']."') as a".$i;
+        
+		    if ($i>0) {$wherestr=$wherestr." and ";}
+		               		 
+		    $wherestr = $wherestr." a".$i.".username=whoplays.username";
+        }
+		$query = "select whoplays.username,
+                tp.totalpoints ".$selectstr." from whoplays,
+                (select sum(whoplays.totalpoints) as totalpoints, username from whoplays, competition
+                where competition.competitionID=whoplays.competitionID and competition.active=1 group by username) as tp ".
+		                $fromstr." where ".$wherestr." and tp.username=whoplays.username group by whoplays.username order by tp.totalpoints desc";
+		$result = $this->db->query($query);
+		return $result;		
 	}
 }
 
