@@ -4,8 +4,7 @@ require('view_questions_page.php');
 
 $page = new View_Questions_Page();
 
-   $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
+   $db = new Db();
    
    $num_results = $_GET['num_result'];
    
@@ -17,22 +16,13 @@ $page = new View_Questions_Page();
       
       if (isset($_POST[$b]))
       {$questionID = $_POST[$b];
-      if ($questionID > 0) {
-           $query = "delete from question where questionID='".$questionID."'";
-        
-           $result = $db->query($query);
-           
-           $query = "delete from pick where questionID='".$questionID."'";
-           
-           $result = $db->query($query);
-           
-           
-           }
+      if ($questionID > 0) 
+      {      	
+          $db->deleteQuestion($questionID);
+      }
       }
         
    } 
-   
-$db->close();
 
 $page->Display();
 

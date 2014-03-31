@@ -38,14 +38,8 @@ public function Display()
 }
 
 public function DisplayBody()
-{
-   
-    @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-        'fpcdata','bB()*45.ab','fpcdata');
-        
-    $query = "select * from competition where competitionID='".$this->compID."'";
-    
-    $result = $db->query($query);
+{    
+    $result = $this->db->getCompetition($this->compID);
     $row = $result->fetch_assoc();
     
     echo "<h2>".$row['compname']." - ".$row['year'];
@@ -60,13 +54,9 @@ public function DisplayBody()
     //standings table
     echo "<h4>Current Standings (Top 10)</h4>";
     
-    $query = "select username, totalpoints from whoplays where competitionID='".$this->compID."' 
-    order by totalpoints desc";
-    
-    $result = $db->query($query);
+    $result = $this->db->getSimpleStandings($this->compID);
     $num_results = $result->num_rows;
 
-    
     echo "<table><tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
     
     $prevnum = null;
@@ -103,11 +93,7 @@ public function DisplayBody()
     if ($league=="NCAA") {$maxweek=15;$special="BOWL";}
     else {$maxweek=17;$special="POST";}
     
-    $query = "select question.weeknum, sum(pick.pickpts), count(pick.pickpts) as numpicks from 
-    pick,question where pick.username='".$_SESSION['username']."'and question.competitionID='".$this->compID."' 
-    and question.questionID=pick.questionID group by question.weeknum order by question.weeknum";
-    
-    $result = $db->query($query);
+    $result = $this->db->getPointsByWeek($_SESSION['username'],$this->compID);
     $num_results = $result->num_rows;
     $curweek = get_weeknum($league,"now");
     
@@ -138,8 +124,6 @@ public function DisplayBody()
            echo "--";
            echo "</b></td><td></td><td></td>";
         }
-        
-        
         
         echo "</tr>";
     }

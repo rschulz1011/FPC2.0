@@ -10,9 +10,9 @@ class Member_Page extends Page
   public $content;
   public $title = "Football Picking Championship";
   public $keywords = "Football picking, pick'em";
-  private $db;
+  protected $db;
   
-  function __construct() {
+  public function __construct() {
   	$this->db = new Db();	
   }
   

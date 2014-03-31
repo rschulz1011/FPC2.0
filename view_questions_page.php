@@ -9,21 +9,10 @@ class View_Questions_Page extends Add_Questions_Page
      public $selectorlink = "viewquestions.php";
             
     public function DisplayQuestionTable()
-    {
-            @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           
-           $query = "select * from (select a.location as aloc, h.location as hloc, game.gameID from game, 
-           team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join 
-           question on question.gameID=g.gameID where question.weeknum='".$this->weeknum."' 
-           and question.competitionID = '".$this->compID."'";
-
-
-           $result = $db->query($query);
+    {      
+    	   $result = $this->db->getQuestions($this->weeknum,$this->compID);
            $numresults = $result->num_rows;
            
-     
            echo "<table><th>QuestionID</th><th>Pick Type</th><th>Game</th><th>Name</th><th>Option 1</th><th>Option 2
               </th><th>Bonus</th><th>Lock Time</th></tr>";
               
@@ -52,9 +41,6 @@ class View_Questions_Page extends Add_Questions_Page
              <input type=\"submit\" value=\"Delete Checked\" /></td></tr>";
         echo "</table>";
        
-    
-    
-      $db->close();
      }
      
 }

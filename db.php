@@ -234,6 +234,61 @@ class Db
 		$query = "delete from team where teamID='".$teamId."'";
 		$result = $this->db->query($query);
 	}
+	
+	function getGames($league,$week)
+	{
+		$query = "select game.gameID, a.location as hloc, b.location as aloc, game.KOtime, game.spread,
+              a.league, game.weeknum, game.ascore, game.hscore
+              from game, team as a, team as b where game.hteamID=a.teamID 
+		      and game.ateamID=b.teamID
+              and a.league='".$league."' and game.weeknum='".$week."'
+              order by game.KOtime, game.gameID";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getQuestions($week,$compId)
+	{
+		$query = "select * from (select a.location as aloc, h.location as hloc, game.gameID from game,
+           team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join
+           question on question.gameID=g.gameID where question.weeknum='".$week."'
+           and question.competitionID = '".$compId."'";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function deleteQuestion($questionId)
+	{
+		$query = "delete from question where questionID='".$questionId."'";
+		$result = $this->db->query($query);
+		 
+		$query = "delete from pick where questionID='".$questionId."'"; 
+		$result = $this->db->query($query);
+	}
+	
+	function getCompetition($compId)
+	{
+		$query = "select * from competition where competitionID='".$compId."'";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getSimpleStandings($compId)
+	{
+		$query = "select username, totalpoints from whoplays where competitionID='".$compId."'
+    	order by totalpoints desc";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function getPointsByWeek($username,$compId)
+	{
+		$query = "select question.weeknum, sum(pick.pickpts), count(pick.pickpts) as numpicks from
+    	pick,question where pick.username='".$username."'and question.competitionID='".$compId."'
+    	and question.questionID=pick.questionID group by question.weeknum order by question.weeknum";
+		$result = $this->db->query($query);
+		return $result;
+	}
 }
 
 

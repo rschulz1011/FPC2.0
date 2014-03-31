@@ -68,10 +68,6 @@ class View_Game_Page extends admin_page
            $league_value = "NCAA";
            $week_value = get_weeknum($league_value,"now");
         }
-        
-        // open database
-        @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
            
         echo "<form name=\"viewteamselect\" action=\"viewgames.php\" method=\"post\">
               <select name=\"gameview_league\" value=\"".$league_value."\">
@@ -96,22 +92,9 @@ class View_Game_Page extends admin_page
         
         echo  "</select><input type=\"submit\" value=\"GO\"/></form>";
 
-        $query = "select game.gameID, team.location, game.KOtime, game.spread,
-              team.league, game.weeknum, game.ascore, game.hscore 
-              from game, team where game.hteamID=team.teamID 
-              and team.league='".$league_value."' and game.weeknum='".$week_value."' 
-              order by game.KOtime, game.gameID";
-        
-        $result = $db->query($query);
-        
+        $result = $this->db->getGames($league_value,$week_value);
         $num_results = $result->num_rows;
-        
-        $query = "select team.location, team.league from game, team where game.ateamID=team.teamID and
-                  team.league='".$league_value."' and game.weeknum='".$week_value."' order by game.KOtime, game.gameID";
-        
-        
-        $awayteam_result = $db->query($query);
-        
+
         echo "<br/><table><th>GameID</th><th>Away Team</th><th>Home Team</th><th>KO Time</th><th>
               Spread</th><th>Away Score</th><th>Home Score</th><form name=\"delform\" action=\"deletegame.php?num_result="
               .$num_results."\" method=\"post\">";
@@ -119,12 +102,11 @@ class View_Game_Page extends admin_page
         for ($i=0;$i<$num_results;$i++)
         {
            $row = $result->fetch_assoc();
-           $away = $awayteam_result->FETCH_ASSOC();
            
            if ($i % 2)  {echo "<tr class=\"shaded\" align=\"center\">";}
            else {echo "<tr align=\"center\">";}
            
-           echo "<td>".$row['gameID']."</td><td>".$away['location']."</td><td>".$row['location'].
+           echo "<td>".$row['gameID']."</td><td>".$row['aloc']."</td><td>".$row['hloc'].
            "</td><td>".$row['KOtime']."</td><td>".$row['spread']."</td><td>".
            $row['ascore']."</td><td>".$row['hscore']."</td><td><a href=\"editgame.php?gameID=".$row['gameID']."\">
            Edit</a></td><td><input type=\"checkbox\" name=\"delcheck".$i."\" value=".
@@ -135,8 +117,6 @@ class View_Game_Page extends admin_page
                 echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>
              <input type=\"submit\" value=\"Delete Checked\" /></td></tr>";
         echo "</table>";
-        
-        $db->close();
 
     }
 
