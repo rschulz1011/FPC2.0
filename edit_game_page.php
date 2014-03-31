@@ -40,37 +40,20 @@ class Edit_Game_Page extends Add_Games_Page
      
      public function EditGameForm()
      {
-            $this->gameID = $_GET['gameID'];
+           $this->gameID = $_GET['gameID'];
        
-            @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-           $query = "select game.KOtime, game.weeknum, game.spread, game.hscore, 
-           game.ascore, team.location, team.league, game.hteamID from game, team where 
-           game.hteamID=team.teamID and gameID='".$this->gameID."'";
-           
-           
-           $result = $db->query($query);
-           
-           $query = "select team.location, game.ateamID from game, team where game.ateamID=team.teamID
-                   and gameID='".$this->gameID."'";
-                   
-           $aresult = $db->query($query);
+           $result = $this->db->getGame($this->gameID);
            
            $row = $result->fetch_assoc();
-           $arow = $aresult->fetch_assoc();
            
            $league = $row['league'];
            
-           $query = "select location, nickname, teamID from team where league = '".$league."' 
-                   order by location";
-           
-           $teamresult = $db->query($query);
+           $teamresult = $this->db->getTeamsByLeague($league);
            
            echo "<table><form name=\"editgame\" action=\"editgame.php?gameID=".$this->gameID."\" method=\"post\">
                 <tr><td>Away Team:</td><td>";
                 
-           $this->MakeTeamSelector($teamresult,"ateam",$arow['ateamID']);
+           $this->MakeTeamSelector($teamresult,"ateam",$row['ateamID']);
            echo "</td></tr><tr><td>Home Team:</td><td>";
            $this->MakeTeamSelector($teamresult,"hteam",$row['hteamID']);
            

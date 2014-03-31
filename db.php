@@ -217,6 +217,14 @@ class Db
 		return $result;
 	}
 	
+	function getTeamsByLeague($league)
+	{
+		$query = "select location, nickname, teamID from team where league = '".$league."'
+                   order by location";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 	function query($query)
 	{
 		$result = $this->db->query($query);
@@ -328,6 +336,17 @@ class Db
 		                $fromstr." where ".$wherestr." and tp.username=whoplays.username group by whoplays.username order by tp.totalpoints desc";
 		$result = $this->db->query($query);
 		return $result;		
+	}
+	
+	function getGame($gameId)
+	{
+		$query = "select game.KOtime, game.weeknum, game.spread, game.hscore,
+           game.ascore, a.location as hloc, b.location as aloc, a.league, game.hteamID, game.ateamID
+				from game, team as a, team as b where
+           game.hteamID=a.teamID and game.ateamID=b.teamID and gameID='".$gameId."'";		 
+
+		$result = $this->db->query($query);
+		return $result;	 
 	}
 }
 
