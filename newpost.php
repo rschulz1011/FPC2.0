@@ -2,16 +2,13 @@
 
 session_start();
 require("get_weeknum.php");
+require("db.php");
 
 if (strlen($_POST['posttext'])>=1)
 {
-   @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-    $query = "insert into post set posttext='".$_POST['posttext']."', username ='".
-         $_SESSION['username']."', posttime = '".date("c",now_time())."'";
-         
-    $db->query($query);
+    $db = new Db();
+
+    $db->newPost($_POST['posttext'],$_SESSION['username']);
          
     header("Location: ".$_POST['linkback'] );
 

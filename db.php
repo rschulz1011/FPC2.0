@@ -409,6 +409,21 @@ class Db
 		return $this->db->affected_rows;
 	}
 	
+	function newPost($post,$user)
+	{
+		$query = "insert into post set posttext='".$post."', username ='".
+				$user."', posttime = '".date("c",now_time())."'";	 
+		$this->db->query($query);
+	}
+	
+	function getWhoPlays($username)
+	{
+		$query = "select * from (select * from whoplays where username='".$username."') as w right join
+          competition on competition.competitionID=w.competitionID where competition.active=1";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 }
 
 

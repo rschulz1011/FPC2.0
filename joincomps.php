@@ -10,9 +10,8 @@ $page->content = "Join Competitions";
 
 if (isset($_GET['joinup']))
 {
-
-    @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
+	$db = new Db();
+	
     for ($i=0;$i<10;$i++)
     {
         $b = "joincheck".$i;
@@ -25,9 +24,7 @@ if (isset($_GET['joinup']))
             
             $query = "select questionID, locktime from question where competitionID='".$compid."' and locktime>'".
                date("Y-m-d H:i:s",now_time())."'";
-            
-            echo $query;
-            
+                        
             $result = $db->query($query);
             $num_results = $result->num_rows;
             
