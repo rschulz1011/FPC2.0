@@ -36,20 +36,12 @@ public function Display()
 }
 
 public function DisplayForm()
-{
-       @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
-       
+{     
       $username=$_SESSION['username'];
-      
-      $query = "select * from user where username='".$username."'";
-      $result = $db->query($query);
-      $row = $result->fetch_assoc();
-      
+          
+      $row = $this->db->getUser($username);
       if (isset($_POST['email']))  {$this->UpdateProfile($row,$db);}
-      
-      $result = $db->query($query);
-      $row = $result->fetch_assoc();
+      $row = $this->db->getUser($username);
       
      echo "<table><tr>";
      echo "<form name=\"signup\" action=\"editprofile.php\" method=\"post\">";
@@ -121,7 +113,7 @@ public function UpdateProfile($row,$db)
    {
    $updates[0] = ' ';
    $query = "update user set ".$updates." where username='".$row['username']."'";
-   $db->query($query);
+   $this->db->query($query);
 
    }
    

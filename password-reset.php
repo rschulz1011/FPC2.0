@@ -4,14 +4,12 @@ require("Mail-1.2.0/Mail.php");
 
 $page = new Password_Reset_Page ();
 
-@ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-		'fpcdata','bB()*45.ab','fpcdata');
+$db = new Db();
 
 if (isset ( $_GET ['email'] )) {
 
-	$query = "select * from user where email ='".filter_input(INPUT_GET,'email',FILTER_SANITIZE_EMAIL)."'";
-	$result = $db->query($query);
-
+	$result = $db->getUserByEmail(filter_input(INPUT_GET,'email',FILTER_SANITIZE_EMAIL));
+	
 	if ($result->num_rows >0)
 	{
 		$row = $result->fetch_assoc();
@@ -61,9 +59,7 @@ if (isset ( $_GET ['email'] )) {
 } 
 else if (isset($_GET['userid']) && isset($_GET['hash']) )
 {
-	$query = "select * from user where username='".$_GET['userid']."'";
-	$result = $db->query($query);
-	$row = $result->fetch_assoc();
+	$row = $db->getUser($_GET['userid']);
 	
 	if (strcmp(crypt($row['email'],'75ifsjvLK927'),$_GET['hash'])==0)
 	{
@@ -73,8 +69,7 @@ else if (isset($_GET['userid']) && isset($_GET['hash']) )
 }
 else if (isset($_POST['password']))
 {
-	$query = "select * from user where email='".$_POST['oldemail']."'";
-	$result = $db->query($query);
+	$result = $db->getUserByEmail($_POST['oldemail']);
 	$row = $result->fetch_assoc();
 	 
 	if (strcmp($row['password'],$_POST['oldpass'])==0)
@@ -92,10 +87,7 @@ else if (isset($_POST['password']))
 		}
 		else
 		{
-			$query = "update user set password ='".crypt($_POST['password'],'7fji9NK@()fafe').
-			"' where email = '".$_POST['oldemail']."'";
-			$db->query($query);
-
+			$db->updatePassword($_POST['oldemail'],crypt($_POST['password'],'7fji9NK@()fafe'));
 
 			$_SESSION['username'] = $_POST['username'];
 			$_SESSION['password'] = crypt($_POST['password'],'7fji9NK@()fafe');

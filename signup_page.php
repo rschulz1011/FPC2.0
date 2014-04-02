@@ -43,8 +43,7 @@ class Signup_Page extends Page
       $error_string = "";
       
       //open Database
-      @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
+      $db = new Db();
       
       // verify unique username
       $user = $_POST['user'];
@@ -55,11 +54,9 @@ class Signup_Page extends Page
       else
       {$goodsignup=0; $error_string=$error_string."Username may not contain ' \" \\ / <br>";}
       
-      $query = "select username from user where username='".$user."'";
-      $result = $db->query($query);
-      $num_rows = $result->num_rows;
+	  $row = $db->getUser($user);
       
-      if ($num_rows!=0) {$goodsignup=0; $error_string=$error_string."Username is already registered</br>";}
+      if (!is_null($row)) {$goodsignup=0; $error_string=$error_string."Username is already registered</br>";}
       
       //verify password match
       $pass1 = $_POST['pass'];
@@ -76,26 +73,15 @@ class Signup_Page extends Page
               
       if ($goodsignup==1)
       {
-           $query = "insert into user values (\"".$user."\",\"".crypt($pass1,'7fji9NK@()fafe')."\",\"".
-           $_POST['email']."\",\"".$_POST['fname']."\",\"".$_POST['lname']."\",".
-           $emailshare.",\"".date('c')."\",0)";
-           
-      
-           $result = $db->query($query);
-           $query_work = $db->affected_rows;
-           
-           if ($query_work!=1) {$goodsignup=0; $error_string=$error_string."Sign up could not be completed. Try again later </br>".$query;}
+           $query_work = $db->addUser($user,crypt($pass1,'7fji9NK@()fafe'),$_POST['email'],$_POST['fname'],$_POST['lname'],$emailshare);
+          
+           if (!$query_work) {$goodsignup=0; $error_string=$error_string."Sign up could not be completed. Try again later </br>".$query;}
            else 
            {echo $this->content;
            $_SESSION['username'] = $user;
-           $_SESSION['password'] = crypt($pass1,'7fji9NK@()fafe');}
-           $db->close();
-           
-      }
-         
-      
+           $_SESSION['password'] = crypt($pass1,'7fji9NK@()fafe');}           
+      } 
       if (strlen($error_string)>1) {$this->content = $error_string;}
-
       return $goodsignup;
   }
       

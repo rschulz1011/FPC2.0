@@ -348,6 +348,52 @@ class Db
 		$result = $this->db->query($query);
 		return $result;	 
 	}
+	
+	function getUser($username)
+	{
+		$query = "select * from user where username='".$username."'";
+		$result = $this->db->query($query);
+		if ($result->num_rows>0)
+		{
+			$row = $result->fetch_assoc();
+		}
+		else
+		{
+			$row = null;
+		}
+		return $row;
+	}
+	
+	function addUser($username,$password,$email,$fname,$lname,$emailshare)
+	{
+		$query = "insert into user values (\"".$username."\",\"".$password."\",\"".
+				$email."\",\"".$fname."\",\"".$lname."\",".
+				$emailshare.",\"".date('c')."\",0)";
+		echo $query;
+		$this->db->query($query);
+		if ($this->db->affected_rows>0)
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	function getUserByEmail($email)
+	{
+		$query = "select * from user where email ='".$email."'";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
+	function updatePassword($email,$password)
+	{
+		$query = "update user set password ='".$password.
+		"' where email = '".$email."'";
+		$this->db->query($query);
+	}
 }
 
 
