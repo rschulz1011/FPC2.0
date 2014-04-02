@@ -22,13 +22,9 @@ if (isset($_POST['hteam']))
     
     $gameID = $_GET['gameID'];
     
-    @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
-           
-    $query = "select team.league from game,team where gameID='".$gameID."' 
-           and team.teamID=game.hteamID";
-    
-    $result = $db->query($query);
+    $db = new Db();
+               
+    $result = $db->getGame($gameID);
     $row = $result->fetch_assoc();
     $league = $row['league'];
     
@@ -64,7 +60,7 @@ if (isset($_POST['hteam']))
     if (strlen($error)==0)
     {
         $result = $db->query($query);
-        $gamechanged = $db->affected_rows;
+        $gamechanged = $db->getAffectedRows();
         
         if ($gamechanged) 
         {$page->content="<g class=\"good\">Game Updated Sucessfully</g><br/>";}

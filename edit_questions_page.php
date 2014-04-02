@@ -40,23 +40,15 @@ class Edit_Questions_Page extends add_questions_page
      public function EditQuestionForm()
      {
          $this->questionID = $_GET['questionID'];
-         
-         @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
            
-         $query = "select * from (select a.location as aloc, h.location as hloc, game.gameID from game, 
-           team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join 
-           question on question.gameID=g.gameID where question.questionID = '".$this->questionID."'";
-           
-        $result = $db->query($query);
+        $result = $this->db->getQuestion($this->questionID);
         
         $row = $result->FETCH_ASSOC();
         
         echo "<table><form name=\"editquestion\" action=\"editquestion.php?questionID=".$this->questionID.
         "\" method = \"post\"><tr><td>Question ID:</td><td>".$row['questionID']."</td></tr>";
         
-        $query2 = "select compname, league from competition where competitionID='".$row['competitionID']."'";
-        $result2 = $db->query($query2);
+        $result2 = $this->db->getCompetition($row['competitionID']);
         $row2 = $result2->FETCH_ASSOC();
         
         echo "<tr><td>Competition: </td><td>".$row2['compname']."</td></tr>";
@@ -72,7 +64,7 @@ class Edit_Questions_Page extends add_questions_page
         $query3 = "select a.location, h.location, game.gameID from team as a, team as h, game where 
            game.weeknum=".$row['weeknum']." and a.teamID=game.ateamID and h.teamID=game.hteamID and a.league='".$row2['league']."'";
            
-        $result3 = $db->query($query3);
+        $result3 = $this->db->getGamesForWeek($row['weeknum'],$row2['league']);
         
         echo "<tr><td> Game: </td><td>";
         
@@ -142,8 +134,6 @@ class Edit_Questions_Page extends add_questions_page
                 "\">View Questions</a></td>";
                 
         echo "</table></form>";
-        
-        $db->close();
            
      }
    

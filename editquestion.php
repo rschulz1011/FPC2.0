@@ -9,8 +9,7 @@ $page = new Edit_Questions_Page();
 
 if (isset($_POST['pickname']))
 {
-     @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-           'fpcdata','bB()*45.ab','fpcdata');
+     $db = new Db();
      
      $query = "update question set ";
      
@@ -68,8 +67,8 @@ if (isset($_POST['pickname']))
       $query = $query." where questionID='".$_GET['questionID']."'";
       
       $result = $db->query($query);
-      $changed = $db->affected_rows;
-      
+      $changed = $db->getAffectedRows();
+            
       if ($changed) 
       {$page->content="<g class=\"good\">Question Updated Sucessfully</g><br/>";}
       else
@@ -77,8 +76,7 @@ if (isset($_POST['pickname']))
       
      if (strlen($error)>0)
     {$page->content="<g class=\"bad\">".$error."</g><br/>";}
-      
-   echo $query;
+
 }
 
 

@@ -255,6 +255,15 @@ class Db
 		return $result;
 	}
 	
+	function getQuestion($questionId)
+	{
+		$query = "select * from (select a.location as aloc, h.location as hloc, game.gameID from game,
+           team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join
+           question on question.gameID=g.gameID where question.questionID = '".$questionId."'";	 
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 	function getQuestions($week,$compId)
 	{
 		$query = "select * from (select a.location as aloc, h.location as hloc, game.gameID from game,
@@ -394,6 +403,12 @@ class Db
 		"' where email = '".$email."'";
 		$this->db->query($query);
 	}
+	
+	function getAffectedRows()
+	{
+		return $this->db->affected_rows;
+	}
+	
 }
 
 
