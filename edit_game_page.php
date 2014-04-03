@@ -10,16 +10,14 @@ class Edit_Game_Page extends Add_Games_Page
      
      public function Display()
      {
+     	$gooduser = $this -> authenticateUser();
                 echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
-     
-     $gooduser = $this -> authenticateUser();
-      
-      
+       
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);

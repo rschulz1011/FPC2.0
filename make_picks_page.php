@@ -10,15 +10,14 @@ class Make_Picks_Page extends Member_Page
 {
 
 public function Display()
-{    
+{   
+	$gooduser = $this -> authenticateUser();
      echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
-     
-     $gooduser = $this -> authenticateUser();
      
      if ($gooduser)
      {

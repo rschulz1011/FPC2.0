@@ -14,6 +14,7 @@ class Add_Questions_Page extends Admin_Page
      
      public function Display()
       {
+      	$gooduser = $this -> authenticateUser();
       echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
@@ -21,7 +22,7 @@ class Add_Questions_Page extends Admin_Page
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
      
-     $gooduser = $this -> authenticateUser();
+     
       
       
      if ($gooduser>0)

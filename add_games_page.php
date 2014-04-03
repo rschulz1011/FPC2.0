@@ -10,19 +10,17 @@ class Add_Games_Page extends Admin_Page
           
       public function Display()
       {
-                echo "<html>\n<head>\n";
+      	$gooduser = $this -> authenticateUser();
+      	echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
-     
-     $gooduser = $this -> authenticateUser();
-      
-      
+           
      if ($gooduser>0)
      {
-     $this -> DisplayMenu($this->memberbuttons);
+     	$this -> DisplayMenu($this->memberbuttons);
      echo "<hr>";
      echo $this->content;
      $this -> DisplayGameTable();

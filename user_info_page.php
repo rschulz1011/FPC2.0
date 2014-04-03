@@ -9,7 +9,7 @@ class User_Info_Page extends Member_Page
 public $userID = '';
 
 public function Display()
-{    
+{   	$gooduser = $this -> authenticateUser();
      echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
@@ -17,7 +17,7 @@ public function Display()
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
      
-     $gooduser = $this -> authenticateUser();
+
      
      if ($gooduser)
      {

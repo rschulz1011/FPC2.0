@@ -10,6 +10,7 @@ class Edit_Questions_Page extends add_questions_page
    
         public function Display()
      {
+     	$gooduser = $this -> authenticateUser();
                 echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
@@ -17,7 +18,7 @@ class Edit_Questions_Page extends add_questions_page
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
      
-     $gooduser = $this -> authenticateUser();
+
       
       
      if ($gooduser>0)

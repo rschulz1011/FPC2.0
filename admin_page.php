@@ -21,10 +21,7 @@ class Admin_Page extends Member_Page
            
            $num_rows = $result->num_rows;
            
-           if ($num_rows==1) {
-                 echo "<font size=\"2\" color=\"red\">You are logged in as:&nbsp &nbsp ".$_SESSION['username'].
-                   "&nbsp &nbsp<a href=\"logout.php\">LOG OUT</a></font>";
-                  
+           if ($num_rows==1) {                  
                   $row = $result->FETCH_ASSOC();
                   $_SESSION['adminlev'] = $row['admin'];
                   

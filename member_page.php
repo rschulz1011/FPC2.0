@@ -17,17 +17,14 @@ class Member_Page extends Page
   }
   
   public function Display()
-  {
-     
-     
+  {    
+  	$gooduser = $this -> authenticateUser();
      echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
      echo "</head>\n<body>\n";
-     $this -> DisplayHeader();
-     
-     $gooduser = $this -> authenticateUser();
+     $this -> DisplayHeader();      
      $this -> DisplayMenu();
      
      if ($gooduser)
@@ -59,6 +56,12 @@ class Member_Page extends Page
      <?php
   }
 
+	public function displayMenu()
+	{
+		echo "<font size=\"2\" color=\"red\">You are logged in as:&nbsp &nbsp ".$_SESSION['username'].
+		"&nbsp &nbsp<a href=\"logout.php\">LOG OUT</a></font>";
+		parent::displayMenu();
+	}
   
   public function authenticateUser()
   {
@@ -69,10 +72,10 @@ class Member_Page extends Page
            $num_rows = $result->num_rows;
            
            if ($num_rows==1) {
-                 echo "<font size=\"2\" color=\"red\">You are logged in as:&nbsp &nbsp ".$_SESSION['username'].
-                   "&nbsp &nbsp<a href=\"logout.php\">LOG OUT</a></font>";
                  $row = $result->fetch_assoc();
                  $_SESSION['adminlev'] = $row['admin'];
+                 setcookie('username',$_SESSION['username'],time()+3600*24*60);
+                 setcookie('password',$_SESSION['password'],time()+3600*24*60);
                  return 1;
             }
              else
@@ -81,7 +84,30 @@ class Member_Page extends Page
                  return 0;
              }
         } 
-        else
+        elseif (isset($_COOKIE['username']))
+        {
+        	$result = $this->db->authenticateUser($_COOKIE['username'],$_COOKIE['password']);
+        	
+        	$num_rows = $result->num_rows;
+        	
+        	if ($num_rows==1)
+        	{
+        		$row = $result->fetch_assoc();
+        		$_SESSION['username'] = $_COOKIE['username'];
+        		$_SESSION['password'] = $_COOKIE['password'];
+        		setcookie('username',$_COOKIE['username'],time()+3600*24*60);
+        		setcookie('password',$_COOKIE['password'],time()+3600*24*60);
+        		$_SESSION['adminlev'] = $row['admin'];
+        		return 1;
+        	}
+        	else 
+        	{
+        		$this->content = "Username or password is incorrect...<br>";
+        		return 0;
+        	}
+        	 
+        }
+        else 
         {
             $this->content = "<br/><b>You are not logged in.</b><br>Log in now:<br/<br/>";
            return 0;
@@ -127,5 +153,3 @@ class Member_Page extends Page
 }
 
 ?>
-     
-     

@@ -10,6 +10,7 @@ public $compID = 1;
 
 public function Display()
 {    
+	$gooduser = $this -> authenticateUser();
      echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
@@ -17,7 +18,7 @@ public function Display()
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
      
-     $gooduser = $this -> authenticateUser();
+     
      
      if ($gooduser)
      {
