@@ -41,8 +41,7 @@ class Update_Scores_Page extends Admin_Page
      
      public function UpdateScoresForm()
      {
-         @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-                'fpcdata','bB()*45.ab','fpcdata');
+         $db = new Db();
                 
          $nowtime = now_time();
          

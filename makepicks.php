@@ -45,8 +45,7 @@
      if ($numconf>0 & $uniqueconf <> $numconf)
      { $error = $error."PICKS NOT SAVED! You may not have duplicate confidence points.</br>";}
      
-      @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
+     $db = new Db();
        
      $query = "select pick.pickID, pick.pick, pick.confpts, question.picktype, question.weeknum,
      pick.locktime, question.questionID from pick, question where question.questionID = pick.questionID 

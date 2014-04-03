@@ -17,8 +17,7 @@ if (isset($_GET['numspreads']))
    $numscores = $_GET['numscores'];
    $numother = $_GET['numother'];
    
-   @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-                'fpcdata','bB()*45.ab','fpcdata');
+   $db = new Db();
     
     for ($i=0;$i<$numspreads;$i++)
     {

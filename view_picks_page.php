@@ -42,8 +42,7 @@ public function DisplayBody()
 {
        echo "<h3>Week ".$this->weeknum." Picks</h3>";
        
-       @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
+    $db = new Db();
        
     $query = "select b.questionID, b.pickname, b.hloc, b.spread, team.location as aloc from (select a.questionID, a.pickname, a.gameID, 
     a.ateamID, a.spread, team.location as hloc from (select question.questionID, question.pickname, game.gameID, game.hteamID, 

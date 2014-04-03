@@ -39,8 +39,7 @@ public function Display()
 
 public function DisplayPicksForm()
 {
-       @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
+       $db = new Db();
        
        //perform database sync if needed
        $query = "select * from pick,question where pick.questionID=question.questionID 

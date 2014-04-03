@@ -38,8 +38,7 @@ public function Display()
 
 public function DisplayMemberHome()
 {
-   @ $db = new mysqli('fpcdata.db.8807435.hostedresource.com',
-       'fpcdata','bB()*45.ab','fpcdata');
+   $db = new Db();
        
    $username=$_SESSION['username'];
            
