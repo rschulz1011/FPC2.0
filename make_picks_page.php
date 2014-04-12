@@ -16,6 +16,7 @@ public function Display()
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
+     $this -> AddScripts();
      echo "</head>\n<body>\n";
      $this -> DisplayHeader();
      
@@ -23,6 +24,7 @@ public function Display()
      {
      $this -> DisplayMenu($this->memberbuttons);
      echo "<hr>";
+     $this->DisplayPicksDiv();
      $this-> DisplayPicksForm();
      echo $this->content;
      }
@@ -34,6 +36,71 @@ public function Display()
      }
      $this -> DisplayFooter();
      echo "</body>\n</html>\n";
+}
+
+public function AddScripts()
+{
+	echo "<script src=\"http://code.jquery.com/jquery-latest.min.js\"
+        type=\"text/javascript\"></script>";
+	echo "<script src=\"js/pickform.js\" type=\"text/javascript\"></script>";
+	echo "<script>
+  		  $(document).ready(function() {
+		  parameters = {";
+	
+	$db = new Db();
+	if (isset($_GET['compID']))
+	{
+		$compID = $_GET['compID'];
+		$_SESSION['last_compID'] = $compID;
+	
+		if (isset($_GET['weeknum']))
+		{
+			$weeknum = $_GET['weeknum'];
+			$_SESSION['last_weeknum'] = $weeknum;
+		}
+		else
+		{
+			$query = "select league from competition where competitionID='".$compID."'";
+			$result = $db->query($query);
+			$row = $result->fetch_assoc();
+			$league = $row['league'];
+			$weeknum = get_weeknum($row['league'],"now");
+			$_SESSION['last_weeknum'] = $weeknum;
+			 
+		}
+	}
+	elseif (isset($_POST['compID']))
+	{
+		$compID = $_POST['compID'];
+		$weeknum = $_POST['weeknum'];
+	
+		$_SESSION['last_compID'] = $compID;
+		$_SESSION['last_weeknum'] = $weeknum;
+	}
+	elseif (isset($_SESSION['last_compID']))
+	{
+		$compID = $_SESSION['last_compID'];
+		$weeknum = $_SESSION['last_weeknum'];
+	}
+	else
+	{
+		$compID = 1;
+		$weeknum = get_weeknum("NFL","now");
+	}
+	echo 'username: "'.$_SESSION['username'].'",';
+	echo 'compId: "'.$compID.'",';
+	echo 'weeknum: "'.$weeknum.'"';
+	
+	echo "	};
+		buildPickTable(parameters);
+	
+	});</script>";
+	
+}
+
+public function DisplayPicksDiv()
+{
+	echo '<div id="pickForm"></div>';
 }
 
 public function DisplayPicksForm()

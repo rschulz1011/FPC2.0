@@ -424,6 +424,21 @@ class Db
 		return $result;
 	}
 	
+	function getPicks($compId,$weeknum,$username)
+	{
+		$query = "select pick.pickID, pick.pick, pick.confpts, pick.locktime, pick.pickpts, q.correctans, 
+   			q.bonusmult, q.questionID, q.picktype, q.aloc, q.hloc, q.option1, q.option2, q.pickname, q.spread, q.picktype 
+   			from (select question.pickname, question.competitionID, question.weeknum, question.picktype, 
+   			question.questionID, question.option1, question.option2, question.bonusmult, question.correctans,
+   			g.aloc, g.hloc, g.spread from (select a.location as aloc, h.location as hloc, game.gameID, game.spread 
+   			from game, team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join question on 
+   			question.gameID=g.gameID) as q, pick where pick.questionID=q.questionID and pick.username='".
+   		
+		$username."' and q.competitionID='".$compId."' and q.weeknum='".$weeknum."' order by pick.pickID";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 }
 
 
