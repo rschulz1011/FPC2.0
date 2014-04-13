@@ -87,9 +87,20 @@ public function AddScripts()
 		$compID = 1;
 		$weeknum = get_weeknum("NFL","now");
 	}
+	
+	$result = $this->db->getTeamIds();
+	$teams = array();
+	for ($index=0;$index<$result->num_rows;$index++)
+	{
+		$row = $result->fetch_assoc();
+		$teams[$row['teamID']] = $row['location'];
+	}
+	
 	echo 'username: "'.$_SESSION['username'].'",';
 	echo 'compId: "'.$compID.'",';
-	echo 'weeknum: "'.$weeknum.'"';
+	echo 'weeknum: "'.$weeknum.'",';
+	echo 'serverTime: "'.date("Y-m-d H:i:s",now_time()).'",';
+	echo 'teams: '.json_encode($teams).',';
 	
 	echo "	};
 		buildPickTable(parameters);

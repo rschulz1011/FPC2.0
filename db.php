@@ -439,6 +439,13 @@ class Db
 		return $result;
 	}
 	
+	function getTeamIds()
+	{
+		$query = "select teamID, location from team";
+		$result = $this->db->query($query);
+		return $result;
+	}
+	
 }
 
 
