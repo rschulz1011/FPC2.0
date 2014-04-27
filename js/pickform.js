@@ -42,9 +42,20 @@ var populatePickRow = function(pick,$newTr){
 	console.log("pickrow");
 	
 	var $tds = $newTr.find("td");
-	$($tds[0]).append(pick.pickname);
+	
+	if (pick.picktype !== "OTHER") {
+		$($tds[0]).append(pick.pickname);
+	}
+	else {
+		$($tds[1]).append(pick.pickname);
+	}
+	
+	
 	if (pick.aloc !== null) {
-		$($tds[1]).append(pick.aloc+" @ "+pick.hloc);
+		
+		if (pick.picktype !== "OTHER") {
+			$($tds[1]).append(pick.aloc+" @ "+pick.hloc);
+		}
 		
 		var spreadString
 		if (pick.spread>0) {
@@ -121,8 +132,40 @@ var fillPickCell = function(pick,$td) {
 			}
 			break;
 		case "OTHER":
+			if (pick.pick=="1"){
+				$td.append(pick.option1);
+			}
+			else if (pick.pick=="2"){
+				$td.append(pick.option2);
+			}
+			
+			if (pick.correctans==null){
+				$td.addClass("pendingpick");
+			}
+			else if (pick.correctans==pick.pick){
+				$td.addClass("goodpick");
+			}
+			else {
+				$td.addClass("badpick");
+			}
+			
 			break;
 		}
+	}
+	else {
+		switch (pick.picktype)
+		{
+		case "ATS":
+		case "ATS-C":
+			createPickList($td,[parseInt(pick.option1),parseInt(pick.option2)],pick.pick,pick.pickID);
+			break;
+		case "S-PRO":
+			createPickList($td,proSurvivorTeams,pick.pick,pick.pickID);
+			break;
+		case "S-COL":
+			createPickList($td,collegeSurvivorTeams,pick.pick,pick.pickID);
+			break;
+		}	
 	}
 	
 }
@@ -150,4 +193,35 @@ var getPickInfo = function(parameters) {
 	});
 	
 	return promise;
+}
+
+var createPickList = function($td,teamList,selection,pickId)
+{
+	var $newPickList = $("<select>",{
+		"class" : "pick",
+		"data-pickId": pickId,
+	});
+	
+	var $blankOption = $("<option>",{
+		val: 0,
+	}).append(" ");
+	if (parseInt(selection)===0){
+		$blankOption.prop("selected",true);
+	}
+	$newPickList.append($blankOption);
+	
+	for (var index=0;index<teamList.length;index++)
+	{
+		var $option = $("<option>",{
+			val: teamList[index],
+		}).append(teams[teamList[index]]);
+		
+		if (parseInt(selection) === teamList[index]) {
+			$option.prop("selected",true);
+		}
+		$newPickList.append($option);
+	}
+	
+	$td.append($newPickList);
+	
 }
