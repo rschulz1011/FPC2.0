@@ -97,11 +97,14 @@ public function AddScripts()
 		$teams[$row['teamID']] = $row['location'];
 	}
 	
+	$collegeSurvivorTeams = $this->db->getAvailableCollegeSurvivorTeams($_SESSION['username'],$compID,$weeknum);
+	
 	echo 'username: "'.$_SESSION['username'].'",';
 	echo 'compId: "'.$compID.'",';
 	echo 'weeknum: "'.$weeknum.'",';
 	echo 'serverTime: "'.date("Y-m-d H:i:s",now_time()).'",';
 	echo 'teams: '.json_encode($teams).',';
+	echo 'collegeSurvivorTeams: '.json_encode($collegeSurvivorTeams).',';
 	
 	echo "	};
 		buildPickTable(parameters);
