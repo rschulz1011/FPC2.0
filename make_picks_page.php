@@ -118,7 +118,7 @@ public function AddScripts()
 public function DisplayPicksDiv()
 {
 	echo '<div id="pickForm"></div>';
-	echo '<div id="pickStatus"></div>';
+	echo '<div id="pickStatus" class="success">Your picks will automatically save.</div>';
 }
 
 public function DisplayCompetitionSelectors()

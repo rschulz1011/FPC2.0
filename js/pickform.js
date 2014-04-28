@@ -28,39 +28,51 @@ var buildPickTable = function(parameters) {
 			var $newTr = $("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
 			
 			if (index % 2 == 1) {
-				$newTr.addClass("shaded");
-			}
+				$newTr.addClass("shaded");	
+			}		
+			$newTr.attr("data-pickId",pick.pickID);
 
 			$pickTable.append($newTr);
 			populatePickRow(pick,$newTr);
 		});
 		
 		$pickTable.find("td").attr("align","center");
-		$pickTable.find("select.pick").on("change",function(){
-			
-			pickSubmitParameters = getPickParameters(parameters);
-			$pickStatusDiv.empty().append("Processing Picks...");
-			$.ajax({
-				url: "pickHandler.php",
-				method: "post",
-				data: {
-					username: parameters.username,
-					hash: parameters.password,
-					picks: JSON.stringify(pickSubmitParameters),
-				},
-				dataType: "json",
-				})
-				.done(function(pickData){
-					console.log('picks updated');
-					$pickStatusDiv.empty().append("Picks Saved");
-				})
-				.fail(function(){
-					$pickStatusDiv.empty().append("Error Saving Picks");
-				});
-		});
+		addPickChangeEvents(parameters,$pickTable,$pickStatusDiv);
 		
 	});
 	
+}
+
+var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
+	$pickTable.find("select.pick").on("change",function(){
+		pickSubmitParameters = getPickParameters(parameters);
+		$pickStatusDiv.empty().append("Processing Picks...");
+		$.ajax({
+			url: "pickHandler.php",
+			method: "post",
+			data: {
+				username: parameters.username,
+				hash: parameters.password,
+				picks: JSON.stringify(pickSubmitParameters),
+				compId: parameters.compId,
+				weeknum: parameters.weeknum,
+			},
+			dataType: "json",
+			})
+			.done(function(pickInfo){
+				console.log('picks updated');
+				$pickStatusDiv.empty().append("Picks Saved");
+				
+				pickInfo.forEach(function(pick,index){
+					populatePickRow(pick,$("tr[data-pickId="+pick.pickID+"]"));
+				});
+				addPickChangeEvents(parameters,$pickTable,$pickStatusDiv);
+				
+			})
+			.fail(function(){
+				$pickStatusDiv.empty().append("Error Saving Picks");
+			});
+	});
 }
 
 var getPickParameters = function(parameters){
@@ -117,7 +129,7 @@ var buildConfPtsSelect = function(pickInfo){
 var populatePickRow = function(pick,$newTr){
 	console.log("pickrow");
 	
-	var $tds = $newTr.find("td");
+	var $tds = $newTr.find("td").empty();
 	
 	if (pick.picktype !== "OTHER") {
 		$($tds[0]).append(pick.pickname);

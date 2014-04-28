@@ -2,9 +2,16 @@
 
 require("db.php");
 
-$compId = $_GET['compId'];
-$username = $_GET['username'];
-$weeknum = $_GET['weeknum'];
+if (isset($_POST['username'])) {
+	$compId = $_POST['compId'];
+	$username = $_POST['username'];
+	$weeknum = $_POST['weeknum'];
+}
+else {
+	$compId = $_GET['compId'];
+	$username = $_GET['username'];
+	$weeknum = $_GET['weeknum'];
+}
 
 $db = new Db();
 
