@@ -470,6 +470,30 @@ class Db
 		return $teamIds;	
 	}
 	
+	function getAvailableProSurvivorTeams($username,$compId,$weeknum)
+	{
+		$query = "select * from (select t.location, t.teamID, t.conference, p.pickID from (select pick.pick, pick.pickID
+   		from pick,question where username='".$username."' and pick.questionID=question.questionID
+   		and question.competitionID='".$compId."' and (question.weeknum<>'".$weeknum."' or pick.locktime<'".date("Y-m-d H:i:s",now_time()).
+	   		"')) as p right join  (select game.gameID, team.teamID, team.location, team.conference from team,
+   		game where (team.teamID=game.ateamID or team.teamID=game.hteamID) and team.league='NFL' and
+   		game.weeknum='".$weeknum."' and game.KOtime>'".date("Y-m-d H:i:s",now_time()).
+	   		"') as t  on p.pick=t.teamID) as a where a.pickID is null order by location";
+	
+		$result = $this->db->query($query);
+		$numTeams = $result->num_rows;
+	
+		$teamIds = array();
+	
+		for ($index=0;$index<$numTeams;$index++)
+		{
+		$row = $result->fetch_assoc();
+		$teamIds[$index] = (int)$row['teamID'];
+		}
+	
+		return $teamIds;
+	}
+	
 }
 
 

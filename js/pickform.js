@@ -2,6 +2,7 @@ var serverTime;
 var teams;
 var collegeSurvivorTeams;
 var proSurvivorTeams;
+var $confPtsSelect;
 
 var buildPickTable = function(parameters) {
 	
@@ -21,6 +22,8 @@ var buildPickTable = function(parameters) {
 				"<th>Lock Time</th><th>Points</th></tr></table>");
 		$pickTableDiv.append($pickTable);
 		
+		$confPtsSelect = buildConfPtsSelect(pickInfo);
+		
 		pickInfo.forEach(function(pick,index){
 			var $newTr = $("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
 			
@@ -36,6 +39,35 @@ var buildPickTable = function(parameters) {
 		
 	});
 	
+}
+
+var buildConfPtsSelect = function(pickInfo){
+	
+	var numConfPicks = 0;
+	var exclusions = [];
+	
+	pickInfo.forEach(function(pick,index){
+		if (pick.picktype==="ATS-C"){
+			numConfPicks++;
+			if (isLocked(pick.locktime)){
+				exclusions.push(parseInt(pick.confpts));
+			}
+		}
+	});
+	
+	var $select = $("<select>",{
+		class: "pick confPts",
+	});
+	
+	$blankOption = $("<option>").append(" ");
+	
+	for (var index=0;index<numConfPicks;index++){
+		if (exclusions.indexOf(index+1)===-1) {
+			var $option = $("<option>").append((index+1).toString());
+			$select.append($option);
+		}
+	}
+	return $select;
 }
 
 var populatePickRow = function(pick,$newTr){
@@ -73,7 +105,14 @@ var populatePickRow = function(pick,$newTr){
 	fillPickCell(pick, $($tds[3]))
 
 	if (pick.confpts !== null && pick.confpts !== "0"){
-		$($tds[4]).append(pick.confpts);
+		var locked = isLocked(pick.locktime);
+
+		if (locked) {
+			$($tds[4]).append(pick.confpts);
+		}
+		else {
+			addConfPtsSelect($($tds[4]),pick.pickID,pick.confpts);
+		}
 	}
 	
 	var date = new Date(pick.locktime);
@@ -95,9 +134,21 @@ var populatePickRow = function(pick,$newTr){
 	$($tds[6]).append(pick.pickpts);	
 }
 
+var isLocked = function(locktime){
+	var locked = serverTime>new Date(locktime);
+	return locked;
+}
+
+var addConfPtsSelect = function($td,pickId,confPts){
+	$newConfPtsSelect = $confPtsSelect.clone();
+	$newConfPtsSelect.attr("data-pickId",pickId);
+	$newConfPtsSelect.val(confPts);
+	$td.append($newConfPtsSelect);
+}
+
 var fillPickCell = function(pick,$td) {
 	
-	var locked = serverTime>new Date(pick.locktime);
+	var locked = isLocked(pick.locktime);
 	
 	if (locked) {
 		switch(pick.picktype)

@@ -25,8 +25,8 @@ public function Display()
      {
      $this -> DisplayMenu($this->memberbuttons);
      echo "<hr>";
+     $this-> DisplayCompetitionSelectors();
      $this->DisplayPicksDiv();
-     $this-> DisplayPicksForm();
      echo $this->content;
      }
      else
@@ -98,6 +98,7 @@ public function AddScripts()
 	}
 	
 	$collegeSurvivorTeams = $this->db->getAvailableCollegeSurvivorTeams($_SESSION['username'],$compID,$weeknum);
+	$proSurvivorTeams = $this->db->getAvailableProSurvivorTeams($_SESSION['username'],$compID,$weeknum);
 	
 	echo 'username: "'.$_SESSION['username'].'",';
 	echo 'compId: "'.$compID.'",';
@@ -105,7 +106,7 @@ public function AddScripts()
 	echo 'serverTime: "'.date("Y-m-d H:i:s",now_time()).'",';
 	echo 'teams: '.json_encode($teams).',';
 	echo 'collegeSurvivorTeams: '.json_encode($collegeSurvivorTeams).',';
-	
+	echo 'proSurvivorTeams: '.json_encode($proSurvivorTeams).',';
 	echo "	};
 		buildPickTable(parameters);
 	
@@ -116,9 +117,10 @@ public function AddScripts()
 public function DisplayPicksDiv()
 {
 	echo '<div id="pickForm"></div>';
+	echo '<div id="pickStatus"></div>';
 }
 
-public function DisplayPicksForm()
+public function DisplayCompetitionSelectors()
 {
        $db = new Db();
        
@@ -204,61 +206,7 @@ public function DisplayPicksForm()
         echo "<option ";if($weeknum==99){echo " selected ";}
         echo " value=\"99\">".$special."</option></select>";
         
-        echo  "</select><input type=\"submit\" value=\"GO\"/></form>";
-       
-       
-
-
-$query = "select pick.pickID, pick.pick, pick.confpts, pick.locktime, pick.pickpts, q.correctans, 
-   q.bonusmult, q.questionID, q.picktype, q.aloc, q.hloc, q.option1, q.option2, q.pickname, q.spread, q.picktype 
-   from (select question.pickname, question.competitionID, question.weeknum, question.picktype, 
-   question.questionID, question.option1, question.option2, question.bonusmult, question.correctans,
-   g.aloc, g.hloc, g.spread from (select a.location as aloc, h.location as hloc, game.gameID, game.spread 
-   from game, team as a, team as h where a.teamID=game.ateamID and h.teamID=game.hteamID) as g right join question on 
-   question.gameID=g.gameID) as q, pick where pick.questionID=q.questionID and pick.username='".
-   $_SESSION['username']."' and q.competitionID='".$compID."' and q.weeknum='".$weeknum."' order by pick.pickID";
-   
-   $result = $db->query($query);
-   $numpicks = $result->num_rows;
-   
-   $query2 = "select * from (select t.location, t.teamID, t.conference, p.pickID from (select pick.pick, pick.pickID 
-   from pick,question where username='".$_SESSION['username']."' and pick.questionID=question.questionID 
-   and question.competitionID='".$compID."' and (question.weeknum<>'".$weeknum."' or pick.locktime<'".date("Y-m-d H:i:s",now_time()).
-   "')) as p right join  (select game.gameID, team.teamID, team.location, team.conference from team, 
-   game where (team.teamID=game.ateamID or team.teamID=game.hteamID) and team.league='".$league."' and 
-   game.weeknum='".$weeknum."' and game.KOtime>'".date("Y-m-d H:i:s",now_time()).
-   "') as t  on p.pick=t.teamID) as a where a.pickID is null and a.conference != 'FCS' order by location";
-   
-   $ateamsresult = $db->query($query2);
-   $numteams = $ateamsresult->num_rows;
-   
-   
-   echo "<form name=\"makepicksform\" action=\"makepicks.php?numpicks=".$numpicks."\" method=\"post\">";
-   
-   echo "<table><tr><th></th><th>Game</th><th>Favorite</th><th>PICK</th><th>Conf</th><th>Locktime</th>
-   <th>Points</th></tr>";
-   
-   $query5 = "select * from pick,question where pick.questionID=question.questionID 
-     and pick.pickpts=0 and question.competitionID='".$compID."' and pick.username='".$_SESSION['username']."' 
-     and question.weeknum<'".$weeknum."' and pick.pick !='-1'";
-     $result5 = $db->query($query5);
-     $wrong = $result5->num_rows;
-   
-   for ($i=0;$i<$numpicks;$i++)
-   {
-       $row = $result->fetch_assoc();
-       
-       if ($i % 2)  {echo "<tr class=\"shaded\" align=\"center\">";}
-       else {echo "<tr align=\"center\">";}
-       $this->Display_Pick_Menu($row,$i+1,$numpicks,$ateamsresult,$numteams,$db,$wrong);
-       echo "</tr>";
-   }
-   
-   echo "<tr><td></td><td></td><td></td><td><input type=\"submit\" value=\"SUBMIT\"/></td>
-   <td></td><td><a href =\"mhome.php\">Member Home</a></td><td></td>
-   <td><a href=\"viewpicks.php?compID=".$compID."&weeknum=".$weeknum
-   ."\">League Picks</a></td></tr></table></form>";
-       
+        echo  "</select><input type=\"submit\" value=\"GO\"/></form>";       
 }
 
 
