@@ -52,7 +52,7 @@ var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
 			method: "post",
 			data: {
 				username: parameters.username,
-				hash: parameters.password,
+				password: parameters.password,
 				picks: JSON.stringify(pickSubmitParameters),
 				compId: parameters.compId,
 				weeknum: parameters.weeknum,
@@ -287,6 +287,7 @@ var getPickInfo = function(parameters) {
 			weeknum: parameters.weeknum,
 			compId: parameters.compId,
 			username: parameters.username,
+			password: parameters.password,
 		},
 		dataType: "json",
 		

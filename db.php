@@ -494,6 +494,51 @@ class Db
 		return $teamIds;
 	}
 	
+	function getPickLockStatus($pickIds) {
+		
+		$pickIdString = '';
+		for ($index=0;$index<sizeof($pickIds);$index++) {
+			if ($index>0) {$pickIdString = $pickIdString.",";}
+			$pickIdString = $pickIdString.$pickIds[$index];
+		}
+		$query = "select pickID,locktime from pick where pickID in (".$pickIdString.")";
+		
+		$result = $this->db->query($query);
+		
+		$status = array();
+		
+		for ($index=0;$index<sizeof($pickIds);$index++) {
+			$row = $result->fetch_assoc();
+			if (strtotime($row['locktime'])<now_time()) {
+				$status[$index] = true;
+			} else {
+				$status[$index] = false;
+			}
+		}
+		
+		return $status;
+	}
+	
+	function updatePicks($pickIds,$pickValues,$pickConfPts,$pickLocks){
+		
+		
+				
+		for ($index=0;$index<sizeof($pickIds);$index++){
+			$setString = '';
+			if ($pickLocks[$index]==false) {
+				$setString = $setString."set pick = ".$pickValues[$index];
+				if (isset($pickConfPts[$index])) {
+					$setString = $setString.", confpts = ".$pickConfPts[$index];
+				}
+				$setString = $setString." where pickID=".$pickIds[$index];
+			}
+			$query = "update pick ".$setString;
+			$this->db->query($query);
+		}
+		
+
+	}
+	
 }
 
 
