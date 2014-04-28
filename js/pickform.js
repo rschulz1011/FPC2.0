@@ -12,11 +12,11 @@ var buildPickTable = function(parameters) {
 	collegeSurvivorTeams = parameters.collegeSurvivorTeams;
 	
 	var $pickTableDiv = $("div#pickForm");
+	var $pickStatusDiv = $("div#pickStatus");
 	
 	getPickInfo(parameters)
 	.done(function(pickInfo){
-		console.log(pickInfo)
-		
+
 		var $pickTable = $("<table><tr><th></th><th>Game</th>" +
 				"<th>Favorite</th><th>PICK</th><th>Conf</th>" +
 				"<th>Lock Time</th><th>Points</th></tr></table>");
@@ -36,9 +36,53 @@ var buildPickTable = function(parameters) {
 		});
 		
 		$pickTable.find("td").attr("align","center");
+		$pickTable.find("select.pick").on("change",function(){
+			
+			pickSubmitParameters = getPickParameters(parameters);
+			$pickStatusDiv.empty().append("Processing Picks...");
+			$.ajax({
+				url: "pickHandler.php",
+				method: "post",
+				data: {
+					username: parameters.username,
+					hash: parameters.password,
+					picks: JSON.stringify(pickSubmitParameters),
+				},
+				dataType: "json",
+				})
+				.done(function(pickData){
+					console.log('picks updated');
+					$pickStatusDiv.empty().append("Picks Saved");
+				})
+				.fail(function(){
+					$pickStatusDiv.empty().append("Error Saving Picks");
+				});
+		});
 		
 	});
 	
+}
+
+var getPickParameters = function(parameters){
+	
+	pickParameters = [];
+	$("select.pick").each(function(index,select){
+		var $select = $(select);
+		if (!$select.hasClass("confPts")){
+			var pick = {}
+			pick.pickId = parseInt($select.attr("data-pickId"));
+			pick.pick = parseInt($select.val());
+			pickParameters.push(pick);
+		}
+		else {
+			pickParameters.forEach(function(pick,index){
+				if (parseInt(pick.pickId) === parseInt($select.attr("data-pickId"))) {
+					pickParameters[index].confPts = parseInt($select.val());
+				}
+			});
+		}
+	});
+	return pickParameters;
 }
 
 var buildConfPtsSelect = function(pickInfo){

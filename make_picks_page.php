@@ -101,6 +101,7 @@ public function AddScripts()
 	$proSurvivorTeams = $this->db->getAvailableProSurvivorTeams($_SESSION['username'],$compID,$weeknum);
 	
 	echo 'username: "'.$_SESSION['username'].'",';
+	echo 'password: "'.$_SESSION['password'].'",';
 	echo 'compId: "'.$compID.'",';
 	echo 'weeknum: "'.$weeknum.'",';
 	echo 'serverTime: "'.date("Y-m-d H:i:s",now_time()).'",';
