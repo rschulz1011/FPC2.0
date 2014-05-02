@@ -60,13 +60,19 @@ var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
 			dataType: "json",
 			})
 			.done(function(pickInfo){
-				console.log('picks updated');
-				$pickStatusDiv.empty().append("Picks Saved");
+				if (pickInfo['error']!==undefined)
+				{
+					$pickStatusDiv.empty().append(pickInfo['error']);
+				}
+				else {
+					console.log('picks updated');
+					$pickStatusDiv.empty().append("Picks Saved");
 				
-				pickInfo.forEach(function(pick,index){
-					populatePickRow(pick,$("tr[data-pickId="+pick.pickID+"]"));
-				});
-				addPickChangeEvents(parameters,$pickTable,$pickStatusDiv);
+					pickInfo.forEach(function(pick,index){
+						populatePickRow(pick,$("tr[data-pickId="+pick.pickID+"]"));
+					});
+					addPickChangeEvents(parameters,$pickTable,$pickStatusDiv);
+				}
 				
 			})
 			.fail(function(){
@@ -83,6 +89,7 @@ var getPickParameters = function(parameters){
 		if (!$select.hasClass("confPts")){
 			var pick = {}
 			pick.pickId = parseInt($select.attr("data-pickId"));
+			pick.pickType = $select.attr("data-picktype");
 			pick.pick = parseInt($select.val());
 			pickParameters.push(pick);
 		}
@@ -264,13 +271,13 @@ var fillPickCell = function(pick,$td) {
 		{
 		case "ATS":
 		case "ATS-C":
-			createPickList($td,[parseInt(pick.option1),parseInt(pick.option2)],pick.pick,pick.pickID);
+			createPickList($td,[parseInt(pick.option1),parseInt(pick.option2)],pick.pick,pick.pickID,pick.picktype);
 			break;
 		case "S-PRO":
-			createPickList($td,proSurvivorTeams,pick.pick,pick.pickID);
+			createPickList($td,proSurvivorTeams,pick.pick,pick.pickID,pick.picktype);
 			break;
 		case "S-COL":
-			createPickList($td,collegeSurvivorTeams,pick.pick,pick.pickID);
+			createPickList($td,collegeSurvivorTeams,pick.pick,pick.pickID,pick.picktype);
 			break;
 		}	
 	}
@@ -303,11 +310,12 @@ var getPickInfo = function(parameters) {
 	return promise;
 }
 
-var createPickList = function($td,teamList,selection,pickId)
+var createPickList = function($td,teamList,selection,pickId,pickType)
 {
 	var $newPickList = $("<select>",{
 		"class" : "pick",
 		"data-pickId": pickId,
+		"data-pickType" : pickType,
 	});
 	
 	var $blankOption = $("<option>",{

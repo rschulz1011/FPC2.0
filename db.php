@@ -521,8 +521,6 @@ class Db
 	
 	function updatePicks($pickIds,$pickValues,$pickConfPts,$pickLocks){
 		
-		
-				
 		for ($index=0;$index<sizeof($pickIds);$index++){
 			$setString = '';
 			if ($pickLocks[$index]==false) {
@@ -534,9 +532,100 @@ class Db
 			}
 			$query = "update pick ".$setString;
 			$this->db->query($query);
+			$this->updatePick($pickIds[$index]);
+		}
+	}
+	
+	function updatePick($pickId)
+	{
+	    $query = "select * from pick,question where pick.questionID=question.questionID and pick.pickID = '".$pickId."'";
+		$result = $this->db->query($query);
+		$row = $result->fetch_assoc();
+
+		// update ATS-C type picks
+		if ($row['picktype']=="ATS-C" & !is_null($row['correctans']))
+		{
+			if ($row['pick']==$row['correctans'])
+			{
+				$pickpts = $row['confpts']*$row['bonusmult'];
+			}
+			elseif ($row['correctans']==-1)
+			{
+				$pickpts = $row['confpts']*$row['bonusmult']/2;
+			}
+			else
+			{
+				$pickpts = 0;
+			}
+		
+			$query = "update pick set pickpts='".$pickpts."' where pickID='".$pickId."'";		 
+			$this->db->query($query);
 		}
 		
+		// update ATS type picks
+		if ($row['picktype']=="ATS" & !is_null($row['correctans']))
+		{
+			if ($row['pick']==$row['correctans'])
+			{
+				$pickpts = 2*$row['bonusmult'];
+			}
+			elseif ($row['correctans']==-1)
+			{
+				$pickpts = 0;
+			}
+			else
+			{
+				$pickpts = -1*$row['bonusmult'];
+			}
 
+			$query = "update pick set pickpts='".$pickpts."' where pickID='".$pickId."'";
+			$this->db->query($query);
+		}
+
+		//update S-COL type picks
+		if ($row['picktype']=="S-COL")
+		{
+			if ( (is_null($row['pick']) | $row['pick']==0) & strtotime($row['locktime'])<now_time())
+			{
+				$query = "update pick set pickpts='-3' where pickID='".$pickId."'";
+				$this->db->query($query);
+			}
+			else
+			{
+				//find relevant game
+				$query = "select * from game where game.weeknum='".$row['weeknum']."' and (game.hteamID='".$row['pick'].
+				"' or game.ateamID='".$row['pick']."')";
+				$gameresult = $this->db->query($query);
+				$gamerow=$gameresult->FETCH_ASSOC();
+					 
+				if (is_null($row['pick']))
+				{
+		
+				}
+				else
+				{
+					$query = "update pick set locktime = '".$gamerow['KOtime']."' where pickID='".$pickId."'";
+					$this->db->query($query);
+				}
+					 
+			}
+		
+		}
+		
+    	//update S-PRO type picks
+    	if ($row['picktype']=="S-PRO" & is_null($row['pick'])==0 & $row['pick']<>0)
+    	{
+        	//find relevant game
+        	$query = "select * from game where game.weeknum='".$row['weeknum']."' and (game.hteamID='".$row['pick'].
+            	"' or game.ateamID='".$row['pick']."')";
+        	$gameresult = $this->db->query($query);
+        	$gamerow=$gameresult->FETCH_ASSOC();
+        
+        	$query = "update pick set locktime = '".$gamerow['KOtime']."' where pickID='".$pickId."'";
+        	$this->db->query($query);  
+    	}
+        
+     
 	}
 	
 }
