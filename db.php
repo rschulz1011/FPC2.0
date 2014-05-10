@@ -439,6 +439,15 @@ class Db
 		return $result;
 	}
 	
+	function getSurvivorOpponent($weeknum,$teamId)
+	{
+		$query = "select * from game where weeknum=".$weeknum." and (ateamID=".$teamId." or hteamID=".$teamId.")";
+		$result = $this->db->query($query);
+		$row = $result->fetch_assoc();
+		if ($row['hteamID']==$teamId) {return $row['ateamID'];}
+		if ($row['ateamID']==$teamId) {return $row['hteamID'];}
+	}
+	
 	function getTeamIds()
 	{
 		$query = "select teamID, location from team";

@@ -198,6 +198,11 @@ var populatePickRow = function(pick,$newTr){
 	if (date.toJSON()!==null) {
 		$($tds[5]).append(day+", "+month+" "+date.getDate()+" "+hours+":"+minutes+" "+ampm);
 	}
+	if (pick.picktype==="S-PRO" || pick.picktype==="S-COL")
+	{
+		$($tds[5]).append(" ("+teams[pick.opponent]+")");
+	}
+	
 	$($tds[6]).append(pick.pickpts);	
 }
 

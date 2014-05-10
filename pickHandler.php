@@ -69,6 +69,10 @@ if ($result->num_rows > 0) {
 
 		for ($index=0;$index<$pickResults->num_rows;$index++){	
 			$row = $pickResults->fetch_assoc();
+			if ($row['picktype']=="S-COL" || $row['picktype'] == "S-PRO")
+			{
+				$row['opponent'] = $db->getSurvivorOpponent($weeknum,$row['pick']);
+			}
 			$pickJson[$index] = $row;
 		}
 		
