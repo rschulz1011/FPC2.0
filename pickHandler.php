@@ -29,31 +29,41 @@ $result = $db->authenticateUser($username,$password);
 if ($result->num_rows > 0) {
 	
 	$confPtsOk = true;
+	$survivorTeamsOk = true;
 	
 	if (isset($picks)){
 		$pickIds = array();
 		$pickValues = array();
 		$pickConfPts = array();
+		$pickTypes = array();
 		
 		for ($index=0;$index<sizeof($picks);$index++)
 		{
 			$pickIds[$index] = $picks[$index][pickId];
 			$pickValues[$index] = $picks[$index][pick];
 			$pickConfPts[$index] = $picks[$index][confPts];
-			$pickTypes[$index] = $picks[$index][type];
+			$pickTypes[$index] = $picks[$index][pickType];
 		}
 		
 		$pickLocks = $db->getPickLockStatus($pickIds);
 		
 		$confPtsOk = checkConfidencePoints($db,$pickIds,$pickConfPts,$compId,$username,$weeknum);
+		$survivorTeamsOk = checkSurvivorTeams($db,$pickIds,$pickValues,$pickTypes,$compId,$username,$weeknum);
 		
-		if ($confPtsOk) {
+		if ($confPtsOk && $survivorTeamsOk) {
 			$db->updatePicks($pickIds,$pickValues,$pickConfPts,$pickLocks);
 		}
 
 	}
 	
-	if ($confPtsOk) {
+	if (!$confPtsOk) {
+		echo '{"error":"Duplicate Confidence Points"}';
+	}
+	else if (!$survivorTeamsOk) {
+		echo '{"error":"Duplicate Survivor Teams"}';
+	} 
+	else
+	{
 		$pickResults = $db->getPicks($compId,$weeknum,$username);
 		$pickJson = array();
 
@@ -64,9 +74,7 @@ if ($result->num_rows > 0) {
 		
 		echo json_encode($pickJson);
 	}
-	else {
-		echo '{"error":"Duplicate Confidence Points"}';
-	}
+
 }
 else {
 	echo "{}";
@@ -100,6 +108,41 @@ function checkConfidencePoints($db,$pickIds,$pickConfPts,$compId,$username,$week
 	for ($index=1;$index<=$num_picks;$index++)
 	{
 		if ($countValues[$index]>1) {$isGood = false;}
+	}
+	
+	return $isGood;
+}
+
+function checkSurvivorTeams($db,$pickIds,$pickValues,$pickTypes,$compId,$username,$weeknum)
+{
+	$result = $db->getPicks($compId,$weeknum,$username);
+	$num_picks = $result->num_rows;
+	$isGood = true;
+	$pickArray = Array();
+	
+	for ($index=0;$index<$num_picks;$index++)
+	{
+		$row = $result->fetch_assoc();
+		if ($row['picktype']=="S-COL") {
+			$pickArray[$row['pickID']] = $row['pick'];
+		}
+	}
+	
+	for ($index=0;$index<sizeof($pickIds);$index++)
+	{
+		if ($pickTypes[$index]=="S-COL")
+		{
+			$pickArray[$pickIds[$index]] = $pickValues[$index];
+		}
+				
+	}
+	
+	$countValues = array_count_values($pickArray);
+	
+	for ($index=0;$index<sizeof($countValues);$index++)
+	{
+		$countValues[0] = 0;
+		if (max($countValues)>1) {$isGood=false;}
 	}
 	
 	return $isGood;
