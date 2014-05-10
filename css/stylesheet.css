@@ -140,3 +140,29 @@ table.specialstanding {
 td.specialinfo {
 	width: 20%
 }
+
+div#pickForm {
+	margin-bottom: 1em;
+}
+
+div#pickStatus {
+	margin-bottom: 1em;
+	font-weight: bold;
+	width: 40%;
+	text-align: center;
+	min-width: 300px;
+	margin-left: 2em;
+}
+
+div#pickStatus.success {
+	background-color: #99FF99;
+}
+
+div#pickStatus.pending {
+	background-color: #FFFF99;
+}
+
+div#pickStatus.error {
+	background-color: #FF3333;
+}
+

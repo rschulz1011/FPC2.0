@@ -47,6 +47,7 @@ var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
 	$pickTable.find("select.pick").on("change",function(){
 		pickSubmitParameters = getPickParameters(parameters);
 		$pickStatusDiv.empty().append("Processing Picks...");
+		$pickStatusDiv.removeClass("success").removeClass("error").addClass("pending");
 		$.ajax({
 			url: "pickHandler.php",
 			method: "post",
@@ -63,10 +64,12 @@ var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
 				if (pickInfo['error']!==undefined)
 				{
 					$pickStatusDiv.empty().append(pickInfo['error']);
+					$pickStatusDiv.removeClass("success").removeClass("pending").addClass("error");
 				}
 				else {
 					console.log('picks updated');
 					$pickStatusDiv.empty().append("Picks Saved");
+					$pickStatusDiv.removeClass("pending").removeClass("error").addClass("success");
 				
 					pickInfo.forEach(function(pick,index){
 						populatePickRow(pick,$("tr[data-pickId="+pick.pickID+"]"));
@@ -77,6 +80,7 @@ var addPickChangeEvents = function(parameters,$pickTable,$pickStatusDiv){
 			})
 			.fail(function(){
 				$pickStatusDiv.empty().append("Error Saving Picks");
+				$pickStatusDiv.removeClass("success").removeClass("pending").addClass("error");
 			});
 	});
 }
