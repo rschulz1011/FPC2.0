@@ -3,6 +3,7 @@
 session_start();
 
 require("db.php");
+require("get_weeknum.php");
 
 class Page
 {

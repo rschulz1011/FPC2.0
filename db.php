@@ -19,6 +19,13 @@ class Db
 		$query = "select password, admin from user where username='".$username."'
            and  password='".$password."'";
 		$result = $this->db->query($query);
+		
+		if ($result->num_rows>0) {
+			$query = "update user set lastlogin = '".date("Y-m-d H:i:s",now_time())."'
+			where username = '".$username."'";
+			$this->db->query($query);
+		}
+		
 		return $result;
 	}
 	
