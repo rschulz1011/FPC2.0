@@ -37,7 +37,7 @@ function get_weeknum($league,$date)
 function now_time()
 {
      //return time()+3600*2;  //convert to EST
-     return strtotime("oct 19, 2013 5:00 pm");
+     return strtotime("nov 30, 2013 9:00 pm");
 }
 
 ?>

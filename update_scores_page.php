@@ -58,23 +58,10 @@ class Update_Scores_Page extends Admin_Page
          $num_results1 = $result1->num_rows;
          
          // games where score is needed
-         
-         
-         $query = "select distinct game.gameID, a.location as aloc, h.location as hloc, game.spread, 
-         game.KOtime from game, question, team as a, team as h, (select pick.pick, question.picktype, 
-         question.weeknum from pick, question where question.questionID = pick.questionID and 
-         question.picktype in (\"S-PRO\",\"S-COL\")) as c where ( ( (c.pick=game.hteamID or c.pick=game.ateamID) 
-         and (game.weeknum=c.weeknum) ) or (question.gameID=game.gameID)) and game.KOtime< '".date("Y-m-d H:i:s",$nowtime)."' and 
-         h.teamID = game.hteamID and a.teamID=game.ateamID and (game.hscore is null or game.ascore is null) 
-         order by game.KOtime";
-         
-         $result2 = $db->query($query);
-         
-         $num_results2 = $result2->num_rows;
+         $result2 = $db->getScoreUpdates();
+         $num_results2 = count($result2);
          
          $query = "select * from question where picktype='OTHER' and locktime<'".date("Y-m-d H:i:s",$nowtime)."' and correctans is null";
-         
-         echo $query;
          
          $result3 = $db->query($query);
          
@@ -111,7 +98,7 @@ class Update_Scores_Page extends Admin_Page
             echo "<table><tr><th>Game</th><th>KO time</th><th>Away</th><th>Home</th></tr>";
             for ($i=0;$i<$num_results2;$i++)
             {
-                $this->WriteTableLine($result2->FETCH_ASSOC(),'score',$i);
+                $this->WriteTableLine($result2[$i],'score',$i);
             }
             echo "</table>";
          }

@@ -637,6 +637,46 @@ class Db
      
 	}
 	
+	function getScoreUpdates()
+	{
+		// get all pending games (in last 7 days, ordered by ko time)	
+		$query = "select game.KOtime,game.gameID, game.hteamID, game.ateamID, a.league, a.location as hloc, b.location as aloc  from game,team as a, team as b where game.KOtime between '"
+         .date("Y-m-d H:i:s",now_time()-604800)."' and '".date("Y-m-d H:i:s",now_time())."' 
+         and (hscore is null or ascore is null) and game.hteamID = a.teamID 
+         and game.ateamID=b.teamID order by game.KOtime";
+		
+		$openGames = $this->db->query($query);
+		$numOpenGames = $openGames->num_rows;
+
+		// get all unique picks for college survivor (in last 7 days)
+		$query = "select distinct pick.pick from pick,question where pick.locktime between '"
+				.date("Y-m-d H:i:s",now_time()-604800)."' and '".date("Y-m-d H:i:s",now_time())."'
+				and pick.questionID = question.questionID and question.picktype = 'S-COL' ";
+
+		$uniquePicks = $this->db->query($query);
+		$numUniquePicks = $uniquePicks->num_rows;
+		
+		$uniquePicksArray = array();
+		
+		for ($index=0;$index<$numUniquePicks;$index++)
+		{
+			$row = $uniquePicks->fetch_assoc();
+			$uniquePicksArray[$index] = $row['pick'];
+		}
+		
+		$pendingGamesArray = array();
+		
+		for ($index=0;$index<$numOpenGames;$index++)
+		{
+			$row = $openGames->fetch_assoc();
+			if ($row['league']=="NFL" || in_array($row[hteamID],$uniquePicksArray) || in_array($row[ateamID],$uniquePicksArray))
+			{
+				array_push($pendingGamesArray,$row);
+			}
+		}
+		return $pendingGamesArray;
+	}
+	
 }
 
 
