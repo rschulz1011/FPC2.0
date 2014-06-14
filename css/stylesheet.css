@@ -166,3 +166,59 @@ div#pickStatus.error {
 	background-color: #FF3333;
 }
 
+div#summary-window {
+	width: 90%;
+	margin-left: 5%;
+	background-color: #ddd;
+}
+
+div#summary-window p {
+	margin: 0px;
+}
+
+div#summary-intro {
+	padding-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+p#summary-title {
+	text-align: center;
+	font-weight: bold;
+}
+
+div.summary-competition {
+	float:left;
+	width: 47%;
+	margin-left: 2%;
+	background-color: #bbb;
+	margin-bottom: 2%;
+}
+
+p#summary-description {
+	text-align: center;
+}
+
+div.summary-competition img {
+	width:100px;
+	float: left;
+	padding: 10px;;
+}
+
+div#summary-window p.summary-competition-title {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin-top: 5px;
+}
+div#summary-window p.summary-competition-info {
+	text-align: left;
+	font-size: 12px;
+	margin-top: 5px;
+}
+
+div#summary-conclusion
+{
+	text-align: center;
+	margin-bottom: 2%;
+}
+
