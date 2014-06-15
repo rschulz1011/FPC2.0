@@ -216,9 +216,78 @@ div#summary-window p.summary-competition-info {
 	margin-top: 5px;
 }
 
-div#summary-conclusion
+div#summary-conclusion p
 {
 	text-align: center;
-	margin-bottom: 2%;
+	padding-bottom: 1%;
+	margin-bottom: 1%;
+}
+
+div#main-links {
+	margin-top: 1em;
+}
+
+div#main-links a {
+	float:left;
+	width:25%;
+	background-color: #ddd;
+	padding: 5px;
+	text-decoration: none;
+	max-height: 60px;
+}
+
+div#main-links a.left {
+	margin-left:23%;	
+}
+
+div#main-links a.right {
+	margin-left: 2%;
+}
+
+div#main-links a img {
+	float: left;
+	width: 60px;
+}
+
+div#main-links a p {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 21px;
+}
+
+div#sub-links {
+	margin-top: 2%;
+	clear: both;
+	margin-bottom:10%;
+}
+
+div#sub-links a {
+	float: left;
+	text-decoration:none;
+	width:18%;
+	margin-left: 2%;
+	background-color: #ddd;
+	padding: 5px;
+	max-height: 40px;
+}
+
+div#sub-links a:first-child {
+	margin-left: 9%;
+}
+
+div#main-links-break {
+	clear:both;
+}
+
+div#sub-links a img {
+	float: left;
+	width: 40px;
+}
+
+div#sub-links a p {
+	font-size: 10px;
+	text-align: center;
+	margin-top: 15px;
 }
 
