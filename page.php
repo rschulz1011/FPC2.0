@@ -37,7 +37,6 @@ class Page
      $this -> DisplayHeader();
      $this -> authenticateUser();
      $this -> DisplayMenu();
-     echo "<hr>";
      echo $this->content;
      $this -> DisplayFooter();
      echo "</body>\n</html>\n";
@@ -64,7 +63,7 @@ class Page
   public function DisplayHeader()
   {
    ?>
-   <table width="100%" cellpadding="12" cellspacing="0" border="0">
+   <table class="header" width="100%" cellpadding="12" cellspacing="0" border="0">
    <tr>
    <td align="left"><img src="images/Logo.png" alt="FPC logo" height="70" width="120"></td>
    <td>
@@ -105,7 +104,7 @@ class Page
                         "Login" => "login.php",);
       }
       
-      echo "<table width=\"100%\" bgcolor=\"white\"
+      echo "<table class=\"menubar\" width=\"100%\" bgcolor=\"white\"
             cellpadding=\"4\" cellspacing=\"4\">\n";
       echo "<tr>\n";
       

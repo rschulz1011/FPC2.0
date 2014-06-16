@@ -291,3 +291,16 @@ div#sub-links a p {
 	margin-top: 15px;
 }
 
+table.menubar
+{
+	margin-bottom: 10px;
+	border-bottom: 2px red solid;
+}
+
+table.menubar td {
+	text-align: center;
+}
+
+table.header td {
+	padding: 0;
+}
