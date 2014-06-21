@@ -384,8 +384,7 @@ class Db
 	{
 		$query = "insert into user values (\"".$username."\",\"".$password."\",\"".
 				$email."\",\"".$fname."\",\"".$lname."\",".
-				$emailshare.",\"".date('c')."\",0)";
-		echo $query;
+				$emailshare.",\"".date('c')."\",0,\"".date('c')."\")";
 		$this->db->query($query);
 		if ($this->db->affected_rows>0)
 		{
