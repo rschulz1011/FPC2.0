@@ -24,7 +24,6 @@ public function Display()
      if ($gooduser)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      $this-> DisplayCompetitionSelectors();
      $this->DisplayPicksDiv();
      echo $this->content;

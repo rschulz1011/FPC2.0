@@ -23,7 +23,6 @@ public function Display()
      if ($gooduser)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      $this-> DisplayStandings();
      echo $this->content;
      }

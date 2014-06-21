@@ -22,7 +22,6 @@ public function Display()
      if ($gooduser)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      $this-> DisplayBody();
      echo $this->content;
      }

@@ -17,7 +17,6 @@ class Overall_Standings_Page extends page
      $this -> DisplayHeader();
      $this -> authenticateUser();
      $this -> DisplayMenu($this->buttons);
-     echo "<hr>";
      echo $this->content;
      echo $this->DisplayStandings();
      $this -> DisplayFooter();

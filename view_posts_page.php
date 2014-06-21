@@ -20,7 +20,6 @@ public function Display()
      if ($gooduser)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this->ShowPosts(100,"viewposts.php");
      }

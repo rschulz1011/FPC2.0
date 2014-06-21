@@ -14,7 +14,6 @@ class Password_Reset_Page extends Page
      $this -> DisplayHeader();
      $this -> authenticateUser();
      $this -> DisplayMenu($this->buttons);
-     echo "<hr>";
 	 echo $this->content;
      $this -> DisplayFooter();
      echo "</body>\n</html>\n";

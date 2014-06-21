@@ -31,7 +31,6 @@ class Database_Update_Page extends Admin_Page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this -> DisplayBody();
      }

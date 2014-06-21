@@ -28,7 +28,6 @@ class Add_Questions_Page extends Admin_Page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this -> DisplaySelector();
      $this -> DisplayQuestionTable();

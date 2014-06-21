@@ -24,7 +24,6 @@ class Edit_Questions_Page extends add_questions_page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this -> EditQuestionForm();
      }

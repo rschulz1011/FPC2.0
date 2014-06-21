@@ -20,7 +20,6 @@ class View_Team_Page extends admin_page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this -> ShowTeams();
      }

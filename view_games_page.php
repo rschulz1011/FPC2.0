@@ -23,7 +23,7 @@ class View_Game_Page extends admin_page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
+
      echo $this->content;
      $this -> ShowGames();
      }

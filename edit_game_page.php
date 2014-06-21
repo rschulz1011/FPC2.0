@@ -21,7 +21,6 @@ class Edit_Game_Page extends Add_Games_Page
      if ($gooduser>0)
      {
      $this -> DisplayMenu($this->memberbuttons);
-     echo "<hr>";
      echo $this->content;
      $this -> EditGameForm();
      }
