@@ -683,6 +683,30 @@ class Db
 		return $pendingGamesArray;
 	}
 	
+	function joinCompetition($username,$compId)
+	{
+		$query = "insert into whoplays (username,competitionID,totalpoints) values
+             ('".$username."',".$compId.",0)";
+		$result = $this->db->query($query);
+		
+		$query = "select questionID, locktime from question where competitionID='".$compId."' and locktime>'".
+				date("Y-m-d H:i:s",now_time())."'";
+		
+		$result = $this->db->query($query);
+		$num_results = $result->num_rows;
+		
+		$query = "insert into pick (questionID, username, locktime) values ";
+		 
+		for ($j=0;$j<$num_results;$j++)
+		{
+		$row = $result->FETCH_ASSOC();
+		$query = $query."(".$row['questionID'].",'".$username."','".$row['locktime']."')";
+				if ($j<($num_results-1)) {$query=$query.",";}
+		}
+		 
+		$result = $this->db->query($query);
+	}
+	
 }
 
 

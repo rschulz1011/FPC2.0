@@ -88,7 +88,8 @@ public function DisplayMemberHome()
        
        if (is_null($row['totalpoints']))
        {
-          echo "<td><a href=\"joincomps.php\">JOIN!</a></td></tr>";
+           $db->joinCompetition($_SESSION['username'],$row['competitionID']);
+          echo "<td>0 pts</td>";
        }
        else
        {

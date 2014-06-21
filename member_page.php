@@ -29,7 +29,6 @@ class Member_Page extends Page
      
      if ($gooduser)
      {
-     echo "<hr>";
      echo $this->content;
      }
      else
