@@ -120,7 +120,7 @@ class Member_Page extends Page
    
       echo "<br><br>";
       
-              echo "<br> Post to Message Board!  <font size=\"2\"> limit 500 characters:</font><br>
+              echo "<div id=\"messageBoard\"><span> Post to Message Board! </span>  <font size=\"2\"> limit 500 characters:</font><br>
         <form name=\"postcomment\" action=\"newpost.php\" method=\"post\">
         <textarea name=\"posttext\" cols=\"100\" rows=\"5\"></textarea><br>
         <input type=\"submit\" value=\"POST!\"/>
@@ -141,6 +141,8 @@ class Member_Page extends Page
              echo $row['posttext']."</td></tr>";
         
         }
+        
+        echo "</div>";
         
         echo "</table><a href=\"viewposts.php\">See All Posts:</a><br>";
         

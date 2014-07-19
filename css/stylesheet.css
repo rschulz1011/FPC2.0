@@ -370,3 +370,34 @@ a.comp-link span.makepicks:hover {
 	background-color: white;
 	color: black;
 }
+
+div#memberHomeLinks {
+	float: left;
+	width: 350px;
+	text-align: center;
+	margin-left: 2%;
+}
+
+div#messageBoard {
+	clear: both;
+}
+
+div#nextPick {
+	background-color: #ddd;
+	margin-top: 0px;
+}
+
+div#nextPick p.nextPickTitle {
+	font-weight: bold;
+	text-align: center;
+	font-size: 16px;
+	padding-top: 16px;
+	margin: 0px;
+}
+
+div#nextPick p.nextPickLine {
+	font-size: 13px;
+	text-align: center;
+	margin: 0;
+	padding: 7px;
+}

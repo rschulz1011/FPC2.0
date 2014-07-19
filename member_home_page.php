@@ -107,17 +107,15 @@ public function DisplayMemberHome()
           echo "<span class=\"totalpoints\">".$row['totalpoints']." pts</span>";
        }
        
-       $query2 = "select min(pick.locktime) from pick, question where question.questionID=pick.questionID and
+       $query2 = "select pick.locktime from pick, question where question.questionID=pick.questionID and
           question.competitionID='".$row['competitionID']."' and pick.locktime>'".date("Y-m-d H:i:s",now_time()).
-          "' and (pick.pick is null or pick.pick=0) and pick.username='".$_SESSION['username']."'";
-        
+          "' and (pick.pick is null or pick.pick=0) and pick.username='".$_SESSION['username']."' order by pick.locktime limit 1";
        $result2 = $db->query($query2);
        $row2 = $result2->FETCH_ASSOC();
-       $nextlock = strtotime($row2['min(pick.locktime)'])-now_time();
-       
+       $nextlock = strtotime($row2['locktime'])-now_time();
        if ($nextlock>0 and $nextlock<259200)
        {
-           echo "<span class=\"picknow\" onclick=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</span>";
+           echo "<span class=\"makepicks picknow\" onclick=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</span>";
        }
        elseif ($nextlock>0)
        {   
@@ -135,17 +133,18 @@ public function DisplayMemberHome()
    
    $query = "select * from pick, question, game where pick.username = '".$_SESSION['username'].
       "' and pick.questionID = question.questionID and question.gameID = game.gameID 
-      and pick.pick is null and pick.locktime>'".date("Y-m-d H:i:s",now_time())."' order by pick.locktime limit 1";
-   
+      and (pick.pick is null or pick.pick=0) and pick.locktime>'".date("Y-m-d H:i:s",now_time())."' order by pick.locktime limit 1";
    $result = $db->query($query);
    $row=$result->FETCH_ASSOC();
    $nextlock = strtotime($row['locktime'])-now_time();
    
-   echo "<td><b>Your next upcoming pick:</b></br>";
+   echo "<div id=\"memberHomeLinks\">";
+   echo "<div id=\"nextPick\">";
+   echo "<p class=\"nextPickTitle\">Your next upcoming pick:</p>";
    
    if ($result->num_rows > 0)
    {
-   
+   echo "<p class=\"nextPickLine\">";
    if ($row['gameID']>0)
    {
        $query2 = "select a.location as aloc, h.location as hloc from game, team as a, team as h where gameID = '".
@@ -171,13 +170,19 @@ public function DisplayMemberHome()
     echo $hours." hours, ".$minutes," minutes, ".$seconds." seconds </br>";
     
    
-   echo "<a href=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</a></td></tr>";
+   echo "<a href=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</a>";
    }
    else
    {
-      echo "No upcoming Picks</td></tr>";
+      echo "<p class=\"nextPickLine\">No upcoming Picks</p></div>";
    }
    
+   if ($_SESSION['adminlev']>0)
+   { echo "<a href=\"adminhome.php\">Admin Home</a><br/>";}
+   
+   echo "<a href=\"editprofile.php\">Edit Your Profile</a><br/>";
+   
+   echo "</div>";
    
    echo "</table><br/><br/>";
    
