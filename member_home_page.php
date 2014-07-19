@@ -10,7 +10,9 @@ class Member_Home_Page extends Member_Page
 public function Display()
 {    
 	$gooduser = $this -> authenticateUser();
+	 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
      echo "<html>\n<head>\n";
+     $this -> AddScripts();
      $this -> DisplayTitle();
      $this -> DisplayKeywords();
      $this -> DisplayStyles();
@@ -32,6 +34,13 @@ public function Display()
      }
      $this -> DisplayFooter();
      echo "</body>\n</html>\n";
+}
+
+private function AddScripts()
+{
+	echo "<script src=\"http://code.jquery.com/jquery-latest.min.js\"
+        type=\"text/javascript\"></script>";
+	echo "<script src=\"js/comp-home.js\" type=\"text/javascript\"></script>";
 }
 
 public function DisplayMemberHome()
@@ -67,10 +76,12 @@ public function DisplayMemberHome()
    if ($place==1) {$placestr='st';} elseif ($place==2) {$placestr='nd';} else {$placestr="th";}
    
    echo "<td width=\"250\">Total Points: ".$totalpoints." -  <a href=\"overallstandings.php\">".$place.$placestr." out of "
-        .$num_participants."</a></td></tr>";
+        .$num_participants."</a></td></tr></table>";
+   
+   
    
    // Current Competitions Block
-   echo "<tr><td><b><br/>Your Current Competitions:</b><br/>";
+   echo "<div id=\"current-competitions\"><p class=\"comps-text\">Your Current Competitions:</p>";
    
       $query = "select * from (select * from whoplays where username='".$username."') as w right join 
    competition on competition.competitionID=w.competitionID where competition.active=1";
@@ -78,21 +89,22 @@ public function DisplayMemberHome()
    $result = $db->query($query);
    $num_results = $result->num_rows;
    
-   echo "<table border=\"2\">";
-   
    for ($i=0;$i<$num_results;$i++)
    {
        $row = $result->FETCH_ASSOC();
-       echo "<tr><td><a class=\"normal\" href=\"chome.php?compid=".$row['competitionID'],"\">".$row['compname']."</a></td>";
+       echo "<a class=\"comp-link\" href=\"chome.php?compid=".$row['competitionID'],"\">"
+       		."<img src=\"images/comp-".$row['defaultpick']."\" ></img>";
+       				
+       echo "<p class=\"comp-title\">".$row['compname']."</p>";
        
        if (is_null($row['totalpoints']))
        {
            $db->joinCompetition($_SESSION['username'],$row['competitionID']);
-          echo "<td>0 pts</td>";
+          echo "<span class=\"totalpoints\">0 pts</span>";
        }
        else
        {
-          echo "<td>".$row['totalpoints']." pts</td>";
+          echo "<span class=\"totalpoints\">".$row['totalpoints']." pts</span>";
        }
        
        $query2 = "select min(pick.locktime) from pick, question where question.questionID=pick.questionID and
@@ -103,24 +115,23 @@ public function DisplayMemberHome()
        $row2 = $result2->FETCH_ASSOC();
        $nextlock = strtotime($row2['min(pick.locktime)'])-now_time();
        
-       
        if ($nextlock>0 and $nextlock<259200)
        {
-           echo "<td><a href=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</a></td>";
+           echo "<span class=\"picknow\" onclick=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</span>";
        }
        elseif ($nextlock>0)
        {   
-          echo "<td><a class=\"normal\" href=\"makepicks.php?compID=".$row['competitionID']."\">Make picks!</a></td>";
+          echo "<span class=\"makepicks picknow\" onclick=\"makepicks.php?compID=".$row['competitionID']."\">Make picks!</span>";
        }
        else
        {
-         echo "<td><a class=\"normal\" href=\"makepicks.php?compID=".$row['competitionID']."\">your picks</a></td>";
+         echo "<span class=\"makepicks normal\" onclick=\"makepicks.php?compID=".$row['competitionID']."\">your picks</span>";
        }
-       echo "</tr>";
+       echo "</a>";
        
        
     }
-    echo "</table></td>";
+    echo "</div>";
    
    $query = "select * from pick, question, game where pick.username = '".$_SESSION['username'].
       "' and pick.questionID = question.questionID and question.gameID = game.gameID 

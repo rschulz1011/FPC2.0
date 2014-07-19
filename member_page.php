@@ -18,7 +18,8 @@ class Member_Page extends Page
   
   public function Display()
   {    
-  	$gooduser = $this -> authenticateUser();
+   	 $gooduser = $this -> authenticateUser();
+  	 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
      echo "<html>\n<head>\n";
      $this -> DisplayTitle();
      $this -> DisplayKeywords();

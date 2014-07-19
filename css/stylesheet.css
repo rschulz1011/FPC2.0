@@ -304,3 +304,69 @@ table.menubar td {
 table.header td {
 	padding: 0;
 }
+
+div#current-competitions {
+	width:350px;
+	margin-left: 2%;
+	background-color:#ddd;
+	float:left;
+}
+
+div#current-competitions a.comp-link {
+	background-color: #ccc;
+	width: 88%;
+	margin-left: 3%;
+	padding: 3%;
+	float: left;
+	margin-bottom: 3%;
+	text-decoration: none;
+}
+
+div#current-competitions a.comp-link img {
+	width: 75px;
+	float: left;
+}
+
+div#current-competitions > p {
+	text-align: center;
+	font-weight: bold;
+}
+
+A.comp-link p {
+	text-decoration: none;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 4%;
+	margin-bottom: 4%;
+	font-size: 18px;
+}
+
+a.comp-link span.totalpoints {
+	margin-left: 10%;
+	color: #444;
+	padding: 3px;
+}
+
+a.comp-link span.normal {
+	float: right;
+	margin-right: 10%;
+	background-color: #AAA;
+	color: black;
+	padding: 3px;
+	border-radius: 4px;
+}
+
+a.comp-link span.picknow {
+	float: right;
+	margin-right: 10%;
+	background-color: red;
+	color: white;
+	padding: 3px;
+	border-radius: 4px;
+	font-weight: bold;
+}
+
+a.comp-link span.makepicks:hover {
+	background-color: white;
+	color: black;
+}
