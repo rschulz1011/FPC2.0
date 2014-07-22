@@ -34,6 +34,7 @@ var buildPickTable = function(parameters) {
 
 			$pickTable.append($newTr);
 			populatePickRow(pick,$newTr);
+			console.log("pick"+index);
 		});
 		
 		$pickTable.find("td").attr("align","center");
@@ -182,7 +183,7 @@ var populatePickRow = function(pick,$newTr){
 		}
 	}
 	
-	var date = new Date(pick.locktime);
+	var date = parseDate(pick.locktime);
 	var dayOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 	var month = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"];
 	
@@ -204,6 +205,11 @@ var populatePickRow = function(pick,$newTr){
 	}
 	
 	$($tds[6]).append(pick.pickpts);	
+}
+
+var parseDate = function(input) {
+	  var parts = input.match(/(\d+)/g);
+	  return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4],parts[5]);
 }
 
 var isLocked = function(locktime){
