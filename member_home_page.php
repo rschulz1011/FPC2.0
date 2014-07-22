@@ -153,11 +153,11 @@ public function DisplayMemberHome()
        $result2 = $db->query($query2);
        $row2=$result2->FETCH_ASSOC();
        
-       echo $row2['aloc']." @ ".$row2['hloc']."</br>";
+       echo $row2['aloc']." @ ".$row2['hloc']."</p>";
     }
     else
     {
-       echo $row['pickname']."<br/>";
+       echo $row['pickname']."</p>";
     }
     
     $days = floor($nextlock/86400);
@@ -165,22 +165,27 @@ public function DisplayMemberHome()
     $minutes = floor(($nextlock-86400*$days-3600*$hours)/60);
     $seconds = floor($nextlock-86400*$days-3600*$hours-60*$minutes);
     
-    if ($days>0) {echo $days." days, ";}
+    echo "<p class=\"nextPickLine\">";
+    if ($days>0) {$days." days, ";}
     
-    echo $hours." hours, ".$minutes," minutes, ".$seconds." seconds </br>";
+    echo $hours." hours, ".$minutes," minutes, ".$seconds." seconds </p>";
     
    
-   echo "<a href=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</a>";
+   echo "<span class=\"nextPickWrapper\"><a class=\"nextPick\" href=\"makepicks.php?compID=".$row['competitionID']."\">PICK NOW!</a></span></div>";
    }
    else
    {
       echo "<p class=\"nextPickLine\">No upcoming Picks</p></div>";
    }
    
-   if ($_SESSION['adminlev']>0)
-   { echo "<a href=\"adminhome.php\">Admin Home</a><br/>";}
+   echo "<div id=\"sub-links\">";
    
-   echo "<a href=\"editprofile.php\">Edit Your Profile</a><br/>";
+   if ($_SESSION['adminlev']>0)
+   { echo "<a href=\"adminhome.php\"><img src=\"images/adminhome.png\"/><p>Admin Home</p></a>";}
+   
+   echo "<a href=\"editprofile.php\"><img src=\"images/editprofile.png\"/><p>Edit Your Profile</p></a>";
+   
+   echo "</div>";
    
    echo "</div>";
    

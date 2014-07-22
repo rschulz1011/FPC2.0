@@ -385,6 +385,8 @@ div#messageBoard {
 div#nextPick {
 	background-color: #ddd;
 	margin-top: 0px;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
 }
 
 div#nextPick p.nextPickTitle {
@@ -399,5 +401,21 @@ div#nextPick p.nextPickLine {
 	font-size: 13px;
 	text-align: center;
 	margin: 0;
-	padding: 7px;
+	margin-bottom: 4px;
+}
+
+a.nextPick {
+	background-color: red;
+	color: white;
+	padding: 3px;
+	border-radius: 4px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+div#memberHomeLinks div#sub-links a {
+	width:40%;
+}
+div#memberHomeLinks div#sub-links a:first-child {
+	margin-left:6%;
 }
