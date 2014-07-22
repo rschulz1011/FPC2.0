@@ -120,9 +120,9 @@ class Member_Page extends Page
    
       echo "<br><br>";
       
-              echo "<div id=\"messageBoard\"><span> Post to Message Board! </span>  <font size=\"2\"> limit 500 characters:</font><br>
+        echo "<div id=\"messageBoard\"><p><span> Post to Message Board! </span>  <span class=\"charLimit\"> limit 500 characters:</span></p>
         <form name=\"postcomment\" action=\"newpost.php\" method=\"post\">
-        <textarea name=\"posttext\" cols=\"100\" rows=\"5\"></textarea><br>
+        <textarea name=\"posttext\"></textarea><br>
         <input type=\"submit\" value=\"POST!\"/>
         <input name=\"linkback\" type=\"hidden\" value=\"".$linkback."\"></form>";
               
@@ -130,21 +130,27 @@ class Member_Page extends Page
         
         $numposts = $result->num_rows;
         
-        echo "Latest Posts:</br><table border=\"1\">";
+        echo "<p>Latest Posts:</p>";
+        			
+        echo "<div id=\"recentPosts\">";
         
         for ($i=0;$i<$numposts;$i++)
         {
              $row = $result->fetch_assoc();
              
-             echo "<tr><td width=\"700\" border=\"0\"><font size=\"1\">Post by: <b>".$row['username']."</b> @ ".$row['posttime']."</font><br>";
+             echo "<div class=\"post\"><p class=\"postBy\">Post by: <b>".$row['username']."</b> @ ".$row['posttime']."</p>";
              
-             echo $row['posttext']."</td></tr>";
+             echo "<p class=\"postText\">".$row['posttext']."</p></div>";
         
         }
         
         echo "</div>";
         
-        echo "</table><a href=\"viewposts.php\">See All Posts:</a><br>";
+        echo "<div class=\"sub-links\"><a href=\"viewposts.php\"><img src=\"images/seePosts.png\"/><p>See All Posts</p></a></div>";
+        
+        echo "</div>";
+        
+        
         
 
         

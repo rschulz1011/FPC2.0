@@ -49,8 +49,8 @@ public function DisplayMemberHome()
        
    $username=$_SESSION['username'];
            
-   echo "<table><tr>";
-   echo "<td width=\"250\">Welcome, ".$_SESSION['username']."!</td>";
+   echo "<div id=\"userStatus\">";
+   echo "<p id=\"welcomeMessage\">Welcome, ".$_SESSION['username']."!</p>";
    
    $query = "select sum(totalpoints) from whoplays,competition where whoplays.username='"
       .$_SESSION['username']."' and whoplays.competitionID = competition.competitionID 
@@ -75,8 +75,8 @@ public function DisplayMemberHome()
    
    if ($place==1) {$placestr='st';} elseif ($place==2) {$placestr='nd';} else {$placestr="th";}
    
-   echo "<td width=\"250\">Total Points: ".$totalpoints." -  <a href=\"overallstandings.php\">".$place.$placestr." out of "
-        .$num_participants."</a></td></tr></table>";
+   echo "<p id=\"totalPoints\">Total Points: ".$totalpoints." -  <a href=\"overallstandings.php\">".$place.$placestr." out of "
+        .$num_participants."</p></div>";
    
    
    
@@ -178,7 +178,7 @@ public function DisplayMemberHome()
       echo "<p class=\"nextPickLine\">No upcoming Picks</p></div>";
    }
    
-   echo "<div id=\"sub-links\">";
+   echo "<div class=\"sub-links\">";
    
    if ($_SESSION['adminlev']>0)
    { echo "<a href=\"adminhome.php\"><img src=\"images/adminhome.png\"/><p>Admin Home</p></a>";}
@@ -188,8 +188,6 @@ public function DisplayMemberHome()
    echo "</div>";
    
    echo "</div>";
-   
-   echo "</table><br/><br/>";
    
 }
 

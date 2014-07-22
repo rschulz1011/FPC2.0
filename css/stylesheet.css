@@ -256,13 +256,13 @@ div#main-links a p {
 	margin-top: 21px;
 }
 
-div#sub-links {
+div.sub-links {
 	margin-top: 2%;
 	clear: both;
 	margin-bottom:10%;
 }
 
-div#sub-links a {
+div.sub-links a {
 	float: left;
 	text-decoration:none;
 	width:18%;
@@ -272,7 +272,7 @@ div#sub-links a {
 	max-height: 40px;
 }
 
-div#sub-links a:first-child {
+div.sub-links a:first-child {
 	margin-left: 9%;
 }
 
@@ -280,12 +280,12 @@ div#main-links-break {
 	clear:both;
 }
 
-div#sub-links a img {
+div.sub-links a img {
 	float: left;
 	width: 40px;
 }
 
-div#sub-links a p {
+div.sub-links a p {
 	font-size: 10px;
 	text-align: center;
 	margin-top: 15px;
@@ -378,10 +378,6 @@ div#memberHomeLinks {
 	margin-left: 2%;
 }
 
-div#messageBoard {
-	clear: both;
-}
-
 div#nextPick {
 	background-color: #ddd;
 	margin-top: 0px;
@@ -413,9 +409,61 @@ a.nextPick {
 	text-decoration: none;
 }
 
-div#memberHomeLinks div#sub-links a {
+div#memberHomeLinks div.sub-links a {
 	width:40%;
 }
-div#memberHomeLinks div#sub-links a:first-child {
+div#memberHomeLinks div.sub-links a:first-child {
 	margin-left:6%;
+}
+
+div#userStatus p {
+	margin-left: 2%;
+	float: left;
+	width: 350px;
+	text-align: center;
+	margin-top: 10px;
+}
+
+
+div#messageBoard {
+	clear: both;
+	padding-top: 30px;
+	width: 720px;
+	margin-left: 2%;
+}
+
+div#messageBoard textarea {
+	width: 100%;
+	height: 5em;
+}
+
+div#messageBoard input {
+	width: 10%;
+	margin-left: 45%;
+}
+
+div#recentPosts div.post {
+	margin: 0;
+}
+
+div#recentPosts p {
+	margin: 0;
+}
+
+div#recentPosts p.postBy {	
+	font-size: 10px;
+} 
+
+div#recentPosts p.postText {
+	width: 100%;
+	background-color: #e4e4e4;
+	margin-bottom: 0.5em;
+	font-size: 14px;
+	padding: 5px;
+}
+
+div#messageBoard div.sub-links a:first-child {
+	width: 20%;
+	margin-left: 40%;
+	margin-bottom: 10px;
 }
