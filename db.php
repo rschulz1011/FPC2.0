@@ -6,11 +6,11 @@ class Db
 	private $db;
 	
 	function __construct() {		
-		//@ $db_temp = new mysqli('fpcdata.db.8807435.hostedresource.com',
-		//		'fpcdata','bB()*45.ab','fpcdata');
+		@ $db_temp = new mysqli('fpcdata.db.8807435.hostedresource.com',
+				'fpcdata','bB()*45.ab','fpcdata');
 		
-		@ $db_temp = new mysqli('fpctest.db.8807435.hostedresource.com',
-				'fpctest','j8@!KODs','fpctest');
+		// @ $db_temp = new mysqli('fpctest.db.8807435.hostedresource.com',
+		//		'fpctest','j8@!KODs','fpctest');
 		
 		$this->db = $db_temp;
 	}
@@ -64,7 +64,7 @@ class Db
 	    return $gameExists;
 	}
 	
-	function addGame($hteam,$ateam,$timeval,$spread)
+	function addGame($hteam,$ateam,$timeval,$spread,$weeknum)
 	{
 		if (strlen($spread)>0)
 		{
@@ -148,6 +148,7 @@ class Db
 	
 	function addQuestion($compId,$pickData,$game,$name,$picktype,$weeknum,$bonus)
 	{
+		echo $compId." ".$game." ".$name." ".$picktype." ".$weeknum;
 		$query = "insert into question (competitionID,gameID,pickname,picktype,weeknum,option1,
                   option2,bonusmult,locktime) values (".$compId.",".$game.",'".$name."','".
 		          $picktype."',".$weeknum.",'".$pickData['optA']."','".$pickData['optB'].
@@ -449,9 +450,13 @@ class Db
 	{
 		$query = "select * from game where weeknum=".$weeknum." and (ateamID=".$teamId." or hteamID=".$teamId.")";
 		$result = $this->db->query($query);
-		$row = $result->fetch_assoc();
-		if ($row['hteamID']==$teamId) {return $row['ateamID'];}
-		if ($row['ateamID']==$teamId) {return $row['hteamID'];}
+		if ($result->num_rows > 0)
+		{
+			$row = $result->fetch_assoc();
+			if ($row['hteamID']==$teamId) {return $row['ateamID'];}
+			if ($row['ateamID']==$teamId) {return $row['hteamID'];}
+		}
+		else { return null;}
 	}
 	
 	function getTeamIds()
@@ -544,10 +549,11 @@ class Db
 					$setString = $setString.", confpts = ".$pickConfPts[$index];
 				}
 				$setString = $setString." where pickID=".$pickIds[$index];
+				$query = "update pick ".$setString;
+				$this->db->query($query);	
 			}
-			$query = "update pick ".$setString;
-			$this->db->query($query);
 			$this->updatePick($pickIds[$index]);
+
 		}
 	}
 	
@@ -613,9 +619,16 @@ class Db
 				$gameresult = $this->db->query($query);
 				$gamerow=$gameresult->FETCH_ASSOC();
 					 
-				if (is_null($row['pick']))
+				if (is_null($row['pick']) | $row['pick']==0)
 				{
-		
+					$query = "select game.KOtime from game, team where team.teamID = game.hteamID and team.league=\"NCAA\" 
+						and weeknum = ".$row['weeknum']." order by KOtime desc limit 1";
+					$result = $this->db->query($query);
+					$thisRow = $result->fetch_assoc();
+					
+					$query = "update pick set locktime = '".$thisRow['KOtime']."' where pickID='".$pickId."'";
+					$this->db->query($query);
+					
 				}
 				else
 				{

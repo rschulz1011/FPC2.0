@@ -5,12 +5,12 @@ function get_weeknum($league,$date)
 {
    if ($league=="NFL")
    {
-      $epoch = "September 3, 2013 12:00 PM";
+      $epoch = "September 2, 2014 12:00 PM";
       $max_week = 17;
    }
    elseif ($league="NCAA")
    {
-      $epoch = "August 27, 2013 12:00 PM";
+      $epoch = "August 26, 2014 12:00 PM";
       $max_week = 15;
    }
    
@@ -18,7 +18,6 @@ function get_weeknum($league,$date)
    
    if ($date=="now") {$now_int = now_time();}
    else {$now_int = strtotime($date);}
-   
    
    $raw_weeks = ($now_int - $epoch_int)/604800;
    
@@ -36,8 +35,8 @@ function get_weeknum($league,$date)
 
 function now_time()
 {
-     //return time()+3600*2;  //convert to EST
-     return strtotime("nov 30, 2013 9:00 pm");
+     return time()+3600*2;  //convert to EST
+     //return strtotime("nov 30, 2013 9:00 pm");
 }
 
 ?>

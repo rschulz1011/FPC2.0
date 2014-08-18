@@ -47,10 +47,10 @@ public function DisplayBody()
     
     echo "</h2>";
        
-    echo "<table border=\"2\"><tr><td align=\"middle\" valign=\"top\">";
+    echo "<div id=\"compHomeStandings\">";
     
     //standings table
-    echo "<h4>Current Standings (Top 10)</h4>";
+    echo "<p class=\"compHomeTitle\">Current Standings (Top 10)</p>";
     
     $result = $this->db->getSimpleStandings($this->compID);
     $num_results = $result->num_rows;
@@ -81,12 +81,12 @@ public function DisplayBody()
     }
     echo "</table>";
     
-    echo "<br><br><a href=detailedstandings.php?compID=".$this->compID.">Detailed Standings</a>";
+    echo "<a href=detailedstandings.php?compID=".$this->compID.">Detailed Standings</a>";
     
-    echo "</td><td align=\"center\">";
+    echo "</div><div class=\"compHomeWeekly\">";
     
     //week-by-week
-    echo "<h4> Your Total Points : ".$userpoints." (".$userrank."/".$num_results.")</h4>"; 
+    echo "<p class=\"compHomeTitle\"> Your Total Points : ".$userpoints." (".$userrank."/".$num_results.")</p>"; 
     
     if ($league=="NCAA") {$maxweek=15;$special="BOWL";}
     else {$maxweek=17;$special="POST";}
@@ -95,40 +95,38 @@ public function DisplayBody()
     $num_results = $result->num_rows;
     $curweek = get_weeknum($league,"now");
     
-    echo "<table>";
+    echo "<div id=\"compHomeWeeklyDetails\">";
     
     for ($i=0;$i<=$maxweek;$i++)
     {
         
-        echo "<tr ";
+        echo "<div class=\"weeklyDetail ";
         
-        if (($i+1)==$curweek) {echo " class=\"highlight\" "; }
+        if (($i+1)==$curweek) {echo "highlight"; }
         
-        echo "><td align=\"center\">";
+        echo "\"><p class=\"weekNum\">";
         if ($i<$maxweek) {echo "Week ".($i+1);} else {echo $special;}
-        echo "</td><td align=\"center\"><b>";
+        echo "</p><p class=\"weekPts\"><b>";
         
         if ($i<$num_results)
         {
            $row = $result->fetch_assoc();
            if (!is_null($row['sum(pick.pickpts)'])) {echo $row['sum(pick.pickpts)']." pts";}
            else {echo "0 pts";}
-           echo "</b></td><td><a href=\"makepicks.php?compID=".$this->compID."&weeknum=".($i+1).
-              "\">Your </br> Picks</a></td><td><a href=\"viewpicks.php?compID=".$this->compID."&weeknum=".($i+1).
+           echo "</b></p><a class=\"makePicks\" href=\"makepicks.php?compID=".$this->compID."&weeknum=".($i+1).
+              "\">Your </br> Picks</a><a class=\"viewPicks\" href=\"viewpicks.php?compID=".$this->compID."&weeknum=".($i+1).
               "\">League </br> Picks</a>";
         }
         else
         {
            echo "--";
-           echo "</b></td><td></td><td></td>";
+           echo "</b></p><td>";
         }
         
-        echo "</tr>";
+        echo "</div>";
     }
     
-    echo "</table>";
-    echo "</td></tr></table>";
-   
+    echo "</div>";
 }
 
 

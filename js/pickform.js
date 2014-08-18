@@ -128,6 +128,7 @@ var buildConfPtsSelect = function(pickInfo){
 	});
 	
 	$blankOption = $("<option>").append(" ");
+	$select.append($blankOption);
 	
 	for (var index=0;index<numConfPicks;index++){
 		if (exclusions.indexOf(index+1)===-1) {
@@ -172,7 +173,7 @@ var populatePickRow = function(pick,$newTr){
 	
 	fillPickCell(pick, $($tds[3]))
 
-	if (pick.confpts !== null && pick.confpts !== "0"){
+	if (pick.picktype == "ATS-C"){
 		var locked = isLocked(pick.locktime);
 
 		if (locked) {
@@ -199,7 +200,7 @@ var populatePickRow = function(pick,$newTr){
 	if (date.toJSON()!==null) {
 		$($tds[5]).append(day+", "+month+" "+date.getDate()+" "+hours+":"+minutes+" "+ampm);
 	}
-	if (pick.picktype==="S-PRO" || pick.picktype==="S-COL")
+	if ((pick.picktype==="S-PRO" || pick.picktype==="S-COL") && pick.opponent)
 	{
 		$($tds[5]).append(" ("+teams[pick.opponent]+")");
 	}

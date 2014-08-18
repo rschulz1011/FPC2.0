@@ -46,7 +46,7 @@
                 
                 if (strlen($error)<3)
                 {
-                   $gameAdded = $db->addGame($hteam,$ateam,$timeval,$spread);
+                   $gameAdded = $db->addGame($hteam,$ateam,$timeval,$spread,$weeknum);
                    if (!$gameAdded) {$error="Was not able to add to database";}
                 }
                      

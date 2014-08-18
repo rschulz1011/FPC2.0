@@ -166,7 +166,7 @@ public function DisplayMemberHome()
     $seconds = floor($nextlock-86400*$days-3600*$hours-60*$minutes);
     
     echo "<p class=\"nextPickLine\">";
-    if ($days>0) {$days." days, ";}
+    if ($days>0) {echo $days." days, ";}
     
     echo $hours." hours, ".$minutes," minutes, ".$seconds." seconds </p>";
     

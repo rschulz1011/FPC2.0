@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ERROR | E_PARSE);
 require("db.php");
 require("get_weeknum.php");
 require("db_sync.php");
