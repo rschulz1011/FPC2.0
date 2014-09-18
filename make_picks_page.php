@@ -127,7 +127,7 @@ public function DisplayCompetitionSelectors()
        //perform database sync if needed
        $query = "select * from pick,question where pick.questionID=question.questionID 
        and (question.picktype=\"ATS-C\" or question.picktype=\"ATS\") 
-       and question.locktime<'".date("Y-m-d H:i:s",now_time())."' and pick.pick is null";
+       and question.locktime<'".date("Y-m-d H:i:s",now_time())."' and (pick.pick is null or pick.pick = 0) ";
        
        $result = $db->query($query);
        $num_expired = $result->num_rows;

@@ -47,7 +47,8 @@ class Database_Update_Page extends Admin_Page
      
      public function DisplayBody()
      {
-         $db = new Db();         
+         $db = new Db();      
+         echo "beforeUpdateDatabase";   
          update_database($db);
      }
      

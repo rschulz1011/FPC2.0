@@ -310,6 +310,7 @@ div#current-competitions {
 	margin-left: 2%;
 	background-color:#ddd;
 	float:left;
+	clear: both;
 }
 
 div#current-competitions a.comp-link {

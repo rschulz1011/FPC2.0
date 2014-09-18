@@ -7,7 +7,7 @@ require("get_weeknum.php");
 $page = new Database_Update_Page;
 
 $page->content = "Database Updated!";
-
+echo "top level";
 $page->Display();
 
 

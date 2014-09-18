@@ -675,6 +675,15 @@ class Db
 		$uniquePicks = $this->db->query($query);
 		$numUniquePicks = $uniquePicks->num_rows;
 		
+		// get all Pick Six games in last 7 days
+		$query = "select gameID from question where question.locktime between '"
+				.date("Y-m-d H:i:s",now_time()-604800)."' and '".date("Y-m-d H:i:s",now_time())."'
+				and question.picktype = 'ATS-C'";
+		
+		$pickSixGames = $this->db->query($query);
+		$numPickSixGames = $pickSixGames->num_rows;
+		
+		
 		$uniquePicksArray = array();
 		
 		for ($index=0;$index<$numUniquePicks;$index++)
@@ -683,16 +692,28 @@ class Db
 			$uniquePicksArray[$index] = $row['pick'];
 		}
 		
+		$pickSixGamesArray = array();
+		
+		for ($index=0;$index<$numPickSixGames;$index++)
+		{
+			$row = $pickSixGames->fetch_assoc();
+			$pickSixGamesArray[$index] = $row['gameID'];
+		}
+		
 		$pendingGamesArray = array();
 		
 		for ($index=0;$index<$numOpenGames;$index++)
 		{
 			$row = $openGames->fetch_assoc();
-			if ($row['league']=="NFL" || in_array($row[hteamID],$uniquePicksArray) || in_array($row[ateamID],$uniquePicksArray))
+			if ($row['league']=="NFL" 
+				|| in_array($row['hteamID'],$uniquePicksArray) 
+				|| in_array($row['ateamID'],$uniquePicksArray)
+				|| in_array($row['gameID'],$pickSixGamesArray))
 			{
 				array_push($pendingGamesArray,$row);
 			}
 		}
+		
 		return $pendingGamesArray;
 	}
 	

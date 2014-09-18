@@ -293,7 +293,9 @@ var fillPickCell = function(pick,$td) {
 			createPickList($td,proSurvivorTeams,pick.pick,pick.pickID,pick.picktype);
 			break;
 		case "S-COL":
-			createPickList($td,collegeSurvivorTeams,pick.pick,pick.pickID,pick.picktype);
+			if (pick.pick>-1) {
+				createPickList($td,collegeSurvivorTeams,pick.pick,pick.pickID,pick.picktype);
+			}
 			break;
 		}	
 	}
